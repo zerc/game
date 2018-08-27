@@ -3,37 +3,54 @@ package main
 import (
 	"game/models"
 	"game/renderers"
+	"time"
+
+	termbox "github.com/nsf/termbox-go"
 )
 
 func main() {
-	scene := models.CreateScene(20, 5)
+	scene := CreateScene(20, 5)
+
+	player := models.Player{Name: "zero13cool", Colour: "red"}
+	player.AddToScene(scene)
 
 	renderer := renderers.Console{}
-	renderer.Draw(scene)
+	defer renderer.DrawText("Thanks for playing the game!")
 
-	// defer func() {
-	// 	fmt.Println("\033[H\033[2J")
-	// 	fmt.Println("Bye!")
-	// }()
+	if err := termbox.Init(); err != nil {
+		panic(err)
+	}
+	defer termbox.Close()
 
-	// player := Player{Name: "zero13cool", x: 0, y: 0, s: &scene, Colour: "red"}
-	// player.Move(1, 1)
+	eventQueue := make(chan termbox.Event)
+	go func() {
+		for {
+			eventQueue <- termbox.PollEvent()
+		}
+	}()
 
-	// fmt.Println("\033[H\033[2J")
-	// fmt.Println(scene.Draw())
-
-	// err := termbox.Init()
-	// if err != nil {
-	// 	panic(err)
-	// }
-	// defer termbox.Close()
-
-	// eventQueue := make(chan termbox.Event)
-	// go func() {
-	// 	for {
-	// 		eventQueue <- termbox.PollEvent()
-	// 	}
-	// }()
+	for {
+		select {
+		case event := <-eventQueue:
+			if event.Type == termbox.EventKey {
+				switch {
+				case event.Key == termbox.KeyArrowLeft || event.Ch == 'h':
+					player.Left()
+				case event.Key == termbox.KeyArrowRight || event.Ch == 'l':
+					player.Right()
+				case event.Key == termbox.KeyArrowUp || event.Ch == 'k':
+					player.Up()
+				case event.Key == termbox.KeyArrowDown || event.Ch == 'j':
+					player.Down()
+				case event.Ch == 'q' || event.Key == termbox.KeyEsc || event.Key == termbox.KeyCtrlC || event.Key == termbox.KeyCtrlD:
+					return
+				}
+			}
+		default:
+			time.Sleep(100 * time.Millisecond)
+			renderer.Draw(scene)
+		}
+	}
 
 	// go func() {
 	// 	ln, err := net.Listen("tcp", ":8088")
@@ -57,29 +74,6 @@ func main() {
 	// 	}
 	// }()
 
-	// for {
-	// 	select {
-	// 	case event := <-eventQueue:
-	// 		if event.Type == termbox.EventKey {
-	// 			switch {
-	// 			case event.Key == termbox.KeyArrowLeft || event.Ch == 'h':
-	// 				player.Left()
-	// 			case event.Key == termbox.KeyArrowRight || event.Ch == 'l':
-	// 				player.Right()
-	// 			case event.Key == termbox.KeyArrowUp || event.Ch == 'k':
-	// 				player.Up()
-	// 			case event.Key == termbox.KeyArrowDown || event.Ch == 'j':
-	// 				player.Down()
-	// 			case event.Ch == 'q' || event.Key == termbox.KeyEsc || event.Key == termbox.KeyCtrlC || event.Key == termbox.KeyCtrlD:
-	// 				return
-	// 			}
-	// 		}
-	// 	default:
-	// 		time.Sleep(100 * time.Millisecond)
-	// 		fmt.Println("\033[H\033[2J")
-	// 		fmt.Println(scene.Draw())
-	// 	}
-	// }
 }
 
 // func handleConnection(conn net.Conn, scene *Scene) {

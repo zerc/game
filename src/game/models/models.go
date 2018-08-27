@@ -7,24 +7,6 @@ type Scene struct {
 	Matrix [][]GameObject
 }
 
-// Creates an empty scene
-func CreateScene(width int, height int) *Scene {
-	brick := Brick{}
-	matrix := [][]GameObject{}
-
-	for i := 0; i < height; i++ {
-		tmp := make([]GameObject, width)
-
-		for x, _ := range tmp {
-			tmp[x] = &brick
-		}
-
-		matrix = append(matrix, tmp)
-	}
-
-	return &Scene{Width: width, Height: height, Matrix: matrix}
-}
-
 // Describes a position of an object on the 2D scene.
 type Position struct {
 	x int
