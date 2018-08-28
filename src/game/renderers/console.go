@@ -44,8 +44,10 @@ func (c Console) Draw(s *models.Scene) error {
 }
 
 // Renders the game object given.
-func Render(o models.GameObject) string {
-	if player, ok := (o).(*models.Player); ok {
+func Render(o *models.GameObject) string {
+	if o == nil {
+		return " "
+	} else if player, ok := (*o).(*models.Player); ok {
 		if player.Colour == "red" {
 			return "\033[1m\033[31m░\033[0m\033[21m"
 		} else if player.Colour == "blue" {

@@ -4,10 +4,10 @@ import "game/models"
 
 // Creates an empty scene
 func CreateScene(width int, height int) *models.Scene {
-	matrix := [][]models.GameObject{}
+	matrix := [][]*models.GameObject{}
 
 	for i := 0; i < height; i++ {
-		tmp := make([]models.GameObject, width)
+		tmp := make([]*models.GameObject, width)
 
 		for x, _ := range tmp {
 			tmp[x] = nil

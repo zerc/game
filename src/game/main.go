@@ -11,8 +11,8 @@ import (
 func main() {
 	scene := CreateScene(20, 5)
 
-	player := models.Player{Name: "zero13cool", Colour: "red"}
-	player.AddToScene(scene)
+	player := models.Player{Name: "zero13cool", Colour: "red", Scene: scene}
+	player.Move(1, 1)
 
 	renderer := renderers.Console{}
 	defer renderer.DrawText("Thanks for playing the game!")
