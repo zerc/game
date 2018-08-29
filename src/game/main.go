@@ -3,7 +3,6 @@ package main
 import (
 	"game/models"
 	"game/renderers"
-	"time"
 
 	termbox "github.com/nsf/termbox-go"
 )
@@ -29,6 +28,8 @@ func main() {
 		}
 	}()
 
+	go renderer.Start(scene)
+
 	for {
 		select {
 		case event := <-eventQueue:
@@ -46,9 +47,6 @@ func main() {
 					return
 				}
 			}
-		default:
-			time.Sleep(100 * time.Millisecond)
-			renderer.Draw(scene)
 		}
 	}
 

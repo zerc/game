@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"game/models"
 	"strings"
+	"time"
 )
 
 // Renders everything to the terminal's stdout.
@@ -15,6 +16,14 @@ func (c Console) DrawText(s string) error {
 	fmt.Println("\033[H\033[2J")
 	fmt.Println(s)
 	return nil
+}
+
+// Starts rendering the scene in the infinite loop.
+func (c Console) Start(s *models.Scene) {
+	for {
+		c.Draw(s)
+		time.Sleep(10 * time.Millisecond)
+	}
 }
 
 // Draws the whole 2D scene.
