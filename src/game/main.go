@@ -1,10 +1,9 @@
 package main
 
 import (
+	"game/inputs"
 	"game/models"
 	"game/renderers"
-
-	termbox "github.com/nsf/termbox-go"
 )
 
 func main() {
@@ -15,40 +14,9 @@ func main() {
 
 	renderer := renderers.Console{}
 	defer renderer.DrawText("Thanks for playing the game!")
-
-	if err := termbox.Init(); err != nil {
-		panic(err)
-	}
-	defer termbox.Close()
-
-	eventQueue := make(chan termbox.Event)
-	go func() {
-		for {
-			eventQueue <- termbox.PollEvent()
-		}
-	}()
-
 	go renderer.Start(scene)
 
-	for {
-		select {
-		case event := <-eventQueue:
-			if event.Type == termbox.EventKey {
-				switch {
-				case event.Key == termbox.KeyArrowLeft || event.Ch == 'h':
-					player.Left()
-				case event.Key == termbox.KeyArrowRight || event.Ch == 'l':
-					player.Right()
-				case event.Key == termbox.KeyArrowUp || event.Ch == 'k':
-					player.Up()
-				case event.Key == termbox.KeyArrowDown || event.Ch == 'j':
-					player.Down()
-				case event.Ch == 'q' || event.Key == termbox.KeyEsc || event.Key == termbox.KeyCtrlC || event.Key == termbox.KeyCtrlD:
-					return
-				}
-			}
-		}
-	}
+	inputs.BindKeyboardInput(&player)
 
 	// go func() {
 	// 	ln, err := net.Listen("tcp", ":8088")
