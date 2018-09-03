@@ -37,3 +37,7 @@ func (p *Player) Up() {
 func (p *Player) Down() {
 	p.Move(p.Position.x, p.Position.y+1)
 }
+
+func (p *Player) Remove() {
+	p.Scene.UnSet(p, p.Position)
+}
