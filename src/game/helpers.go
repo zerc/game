@@ -91,3 +91,17 @@ func AddNewPlayer(conn net.Conn, scene *models.Scene) {
 		}
 	}
 }
+
+// InitClient connects to the server specified and registers the user specified.
+func InitClient(player *models.Player, host *string, port *string) *net.Conn {
+	fmt.Printf("Connecting to %s ...", *host)
+
+	conn, err := net.Dial("tcp", fmt.Sprintf("%s:%s", *host, *port))
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Printf("Connected")
+	fmt.Fprintf(conn, fmt.Sprintf("init:%s,%s\n", player.Name, player.Colour))
+	return &conn
+}

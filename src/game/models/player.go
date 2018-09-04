@@ -1,10 +1,17 @@
 package models
 
+import (
+	"fmt"
+	"log"
+	"net"
+)
+
 type Player struct {
 	Name     string
 	Colour   string
 	Scene    *Scene
 	Position *Position
+	Conn     *net.Conn
 }
 
 func (p Player) ID() string {
@@ -19,6 +26,15 @@ func (p *Player) Move(x, y int) {
 			p.Scene.UnSet(p, p.Position) // Remove the player from the previous cell if there was any.
 		}
 		p.Position = &newPosition
+
+		// If there is an active connection - send the data to it.
+		if p.Conn != nil {
+			_, err := fmt.Fprintf(*p.Conn, fmt.Sprintf("move:%d,%d\n", p.Position.x, p.Position.y))
+
+			if err != nil {
+				log.Fatal(err)
+			}
+		}
 	}
 }
 

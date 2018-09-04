@@ -1,21 +1,45 @@
 package main
 
 import (
+	"flag"
+	"fmt"
 	"game/inputs"
 	"game/models"
 	"game/renderers"
 )
 
-func main() {
-	scene := CreateScene(20, 5)
+var host = flag.String("h", "", "To connect to. For example: 127.0.0.1")
+var port = flag.String("p", "8088", "Port to connect to")
+var name = flag.String("n", "Player", "Your name")
 
-	player := models.Player{Name: "zero13cool", Colour: "red", Scene: scene}
+func main() {
+	flag.Parse()
+
+	IsServer := true
+	if *host != "" {
+		IsServer = false
+	}
+
+	scene := CreateScene(20, 5)
+	player := models.Player{Name: *name, Colour: "red", Scene: scene, Conn: nil}
+
+	if IsServer == false {
+		player.Colour = "blue"
+	}
+
 	player.Move(1, 1)
 
 	renderer := renderers.Console{}
 	defer renderer.DrawText("Thanks for playing the game!")
 	go renderer.Start(scene)
-	go InitServer(scene, ":8088")
+
+	if IsServer {
+		go InitServer(scene, fmt.Sprintf(":%s", *port))
+	} else {
+		go InitClient(&player, host, port)
+		player.Conn = InitClient(&player, host, port)
+		defer (*player.Conn).Close()
+	}
 
 	inputs.BindKeyboardInput(&player)
 }
