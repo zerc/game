@@ -6,6 +6,8 @@ import (
 	"game/inputs"
 	"game/models"
 	"game/renderers"
+	"log"
+	"net"
 )
 
 var host = flag.String("h", "", "To connect to. For example: 127.0.0.1")
@@ -35,10 +37,20 @@ func main() {
 
 	if IsServer {
 		go InitServer(scene, fmt.Sprintf(":%s", *port))
+		go InitServerTwo(&player)
 	} else {
-		go InitClient(&player, host, port)
 		player.Conn = InitClient(&player, host, port)
 		defer (*player.Conn).Close()
+
+		go func(scene *models.Scene, host *string) {
+			conn, err := net.Dial("tcp", fmt.Sprintf("%s:%s", *host, "8089"))
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			AddNewPlayer(conn, scene)
+
+		}(scene, host)
 	}
 
 	inputs.BindKeyboardInput(&player)

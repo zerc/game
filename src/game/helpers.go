@@ -51,6 +51,37 @@ func InitServer(scene *models.Scene, port string) {
 	}
 }
 
+func InitServerTwo(player *models.Player) {
+	ln, err := net.Listen("tcp", ":8089")
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	defer ln.Close()
+
+	for {
+		conn, err := ln.Accept()
+
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		fmt.Fprintf(conn, fmt.Sprintf("init:%s,%s\n", player.Name, player.Colour))
+
+		go func(conn net.Conn, player *models.Player) {
+			defer conn.Close()
+
+			for {
+				if player.Position != nil {
+					fmt.Fprintf(conn, player.GetPositionString())
+				}
+				time.Sleep(100 * time.Millisecond)
+			}
+		}(conn, player)
+	}
+}
+
 // Adds new network player to the scene
 func AddNewPlayer(conn net.Conn, scene *models.Scene) {
 	var player models.Player

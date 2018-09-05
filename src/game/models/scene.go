@@ -32,10 +32,11 @@ func (s *Scene) Set(obj GameObject, pos *Position) bool {
 	if currentObj, err := s.Get(pos); err == nil {
 		if currentObj == nil {
 			s.Matrix[pos.y][pos.x] = &obj
-		} else {
+			return true
+		} else if obj == nil { // called from UnSet
 			s.Matrix[pos.y][pos.x] = nil
+			return true
 		}
-		return true
 	}
 
 	return false

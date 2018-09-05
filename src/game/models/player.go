@@ -29,13 +29,21 @@ func (p *Player) Move(x, y int) {
 
 		// If there is an active connection - send the data to it.
 		if p.Conn != nil {
-			_, err := fmt.Fprintf(*p.Conn, fmt.Sprintf("move:%d,%d\n", p.Position.x, p.Position.y))
+			_, err := fmt.Fprintf(*p.Conn, p.GetPositionString())
 
 			if err != nil {
 				log.Fatal(err)
 			}
 		}
 	}
+}
+
+func (p *Player) GetPositionString() string {
+	if p.Position != nil {
+		return fmt.Sprintf("move:%d,%d\n", p.Position.x, p.Position.y)
+	}
+
+	return ""
 }
 
 func (p *Player) Left() {
