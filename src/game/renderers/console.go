@@ -61,6 +61,10 @@ func Render(o *models.GameObject) string {
 			return "\033[1m\033[31m░\033[0m\033[21m"
 		} else if player.Colour == "blue" {
 			return "\033[1m\033[34m░\033[0m\033[21m"
+		} else if player.Colour == "green" {
+			return "\033[1m\033[32m░\033[0m\033[21m"
+		} else if player.Colour == "orange" {
+			return "\033[1m\033[36m░\033[0m\033[21m"
 		} else {
 			return "░"
 		}

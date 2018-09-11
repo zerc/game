@@ -7,6 +7,7 @@ type Scene struct {
 	Width  int
 	Height int
 	Matrix [][]*GameObject
+	Index  map[string]*Player
 }
 
 // Extracts a game object from the position given.

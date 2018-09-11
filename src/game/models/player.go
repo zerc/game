@@ -21,6 +21,10 @@ func (p Player) ID() string {
 func (p *Player) Move(x, y int) {
 	newPosition := Position{x, y}
 
+	if p.Scene.Index[p.ID()] == nil {
+		p.Scene.Index[p.ID()] = p
+	}
+
 	if ok := p.Scene.Set(p, &newPosition); ok { // The new cell is occupied successfully.
 		if p.Position != nil {
 			p.Scene.UnSet(p, p.Position) // Remove the player from the previous cell if there was any.
@@ -40,7 +44,7 @@ func (p *Player) Move(x, y int) {
 
 func (p *Player) GetPositionString() string {
 	if p.Position != nil {
-		return fmt.Sprintf("move:%d,%d\n", p.Position.x, p.Position.y)
+		return fmt.Sprintf("%s,%s,%d,%d\n", p.ID(), p.Colour, p.Position.x, p.Position.y)
 	}
 
 	return ""

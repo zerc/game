@@ -24,7 +24,7 @@ func CreateScene(width int, height int) *models.Scene {
 		matrix = append(matrix, tmp)
 	}
 
-	return &models.Scene{Width: width, Height: height, Matrix: matrix}
+	return &models.Scene{Width: width, Height: height, Matrix: matrix, Index: make(map[string]*models.Player)}
 }
 
 // Inits a server
@@ -51,7 +51,7 @@ func InitServer(scene *models.Scene, port string) {
 	}
 }
 
-func InitServerTwo(player *models.Player) {
+func InitServerTwo(scene *models.Scene) {
 	ln, err := net.Listen("tcp", ":8089")
 
 	if err != nil {
@@ -67,24 +67,24 @@ func InitServerTwo(player *models.Player) {
 			log.Fatal(err)
 		}
 
-		fmt.Fprintf(conn, fmt.Sprintf("init:%s,%s\n", player.Name, player.Colour))
-
-		go func(conn net.Conn, player *models.Player) {
+		go func(conn net.Conn, scene *models.Scene) {
 			defer conn.Close()
 
 			for {
-				if player.Position != nil {
-					fmt.Fprintf(conn, player.GetPositionString())
+				for _, player := range scene.Index {
+					if player.Position != nil {
+						fmt.Fprintf(conn, player.GetPositionString())
+					}
 				}
 				time.Sleep(100 * time.Millisecond)
 			}
-		}(conn, player)
+		}(conn, scene)
 	}
 }
 
 // Adds new network player to the scene
 func AddNewPlayer(conn net.Conn, scene *models.Scene) {
-	var player models.Player
+	var player *models.Player
 	defer func() {
 		conn.Close()
 		player.Remove()
@@ -101,24 +101,22 @@ func AddNewPlayer(conn net.Conn, scene *models.Scene) {
 		if n == 0 {
 			time.Sleep(100 * time.Millisecond)
 		} else {
-			cmd := strings.Split(fmt.Sprintf("%s", tmp), ":")
+			chunks := strings.Split(fmt.Sprintf("%s", tmp), ",")
 
-			if len(cmd) != 2 {
+			if len(chunks) != 4 {
 				continue
 			}
 
-			if cmd[0] == "init" {
-				chunks := strings.Split(cmd[1], ",")
-				// {"init", name, colour}
-				player = models.Player{Name: chunks[0], Colour: chunks[1], Scene: scene}
-				player.Move(2, 2)
-			} else if cmd[0] == "move" {
-				// {"move", "x,y"}
-				coord := strings.Split(cmd[1], ",")
-				x, _ := strconv.Atoi(coord[0])
-				y, _ := strconv.Atoi(coord[1])
-				player.Move(x, y)
+			id, colour := chunks[0], chunks[1]
+			x, _ := strconv.Atoi(chunks[2])
+			y, _ := strconv.Atoi(chunks[3])
+
+			if scene.Index[id] == nil {
+				player = &models.Player{Name: id, Colour: colour, Scene: scene}
+			} else {
+				player = scene.Index[id]
 			}
+			player.Move(x, y)
 		}
 	}
 }
@@ -133,6 +131,6 @@ func InitClient(player *models.Player, host *string, port *string) *net.Conn {
 	}
 
 	fmt.Printf("Connected")
-	fmt.Fprintf(conn, fmt.Sprintf("init:%s,%s\n", player.Name, player.Colour))
+	fmt.Fprintf(conn, player.GetPositionString())
 	return &conn
 }
