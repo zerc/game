@@ -134,3 +134,17 @@ func InitClient(player *models.Player, host *string, port *string) *net.Conn {
 	fmt.Fprintf(conn, player.GetPositionString())
 	return &conn
 }
+
+func InitBot(player *models.Player) {
+	step := 1
+	x, y := 1, 1
+
+	for {
+		x += step
+		if player.Move(x, y) == false {
+			step *= -1
+			x += step // the new position wasn't acquired
+		}
+		time.Sleep(500 * time.Millisecond)
+	}
+}

@@ -18,7 +18,7 @@ func (p Player) ID() string {
 	return p.Name
 }
 
-func (p *Player) Move(x, y int) {
+func (p *Player) Move(x, y int) bool {
 	newPosition := Position{x, y}
 
 	if p.Scene.Index[p.ID()] == nil {
@@ -39,7 +39,11 @@ func (p *Player) Move(x, y int) {
 				log.Fatal(err)
 			}
 		}
+
+		return true
 	}
+
+	return false
 }
 
 func (p *Player) GetPositionString() string {
