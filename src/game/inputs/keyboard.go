@@ -1,6 +1,7 @@
 package inputs
 
 import (
+	"fmt"
 	"game/models"
 
 	termbox "github.com/nsf/termbox-go"
@@ -8,10 +9,9 @@ import (
 
 // Binds input from the keyboard to the player given.
 func BindKeyboardInput(p *models.Player) {
-	if err := termbox.Init(); err != nil {
-		panic(err)
+	if !termbox.IsInit {
+		panic(fmt.Errorf("Termbox isn't initialised!"))
 	}
-	defer termbox.Close()
 
 	eventQueue := make(chan termbox.Event)
 	go func() {

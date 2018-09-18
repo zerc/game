@@ -3,8 +3,9 @@ package renderers
 import (
 	"fmt"
 	"game/models"
-	"strings"
 	"time"
+
+	termbox "github.com/nsf/termbox-go"
 )
 
 // Renders everything to the terminal's stdout.
@@ -13,7 +14,7 @@ type Console struct {
 
 // Draws a text provided.
 func (c Console) DrawText(s string) error {
-	fmt.Println("\033[H\033[2J")
+	fmt.Println("\033[H\033[2J\n")
 	fmt.Println(s)
 	return nil
 }
@@ -28,47 +29,60 @@ func (c Console) Start(s *models.Scene) {
 
 // Draws the whole 2D scene.
 func (c Console) Draw(s *models.Scene) error {
-	var tmp []string
-	tmp = append(tmp, fmt.Sprintf("┏%s┓", strings.Repeat("━", s.Width)))
+	var r rune
 
-	for _, row := range s.Matrix {
-		rowTmp := make([]string, s.Width+2)
-		rowTmp = append(rowTmp, "┃")
-
-		for _, obj := range row {
-			rowTmp = append(rowTmp, Render(obj))
+	// Top border
+	for i := 0; i <= s.Width+1; i++ {
+		switch {
+		case i == 0:
+			r = '┏'
+		case i > s.Width:
+			r = '┓'
+		default:
+			r = '━'
 		}
-
-		rowTmp = append(rowTmp, "┃")
-		tmp = append(tmp, strings.Join(rowTmp, ""))
+		termbox.SetCell(i+1, 1, r, termbox.ColorWhite, termbox.ColorDefault)
 	}
 
-	tmp = append(tmp, fmt.Sprintf("┗%s┛", strings.Repeat("━", s.Width)))
-	rendered := strings.Join(tmp, "\n")
+	// Body
+	for y, row := range s.Matrix {
+		termbox.SetCell(1, y+2, '┃', termbox.ColorWhite, termbox.ColorDefault)
 
-	fmt.Println("\033[H\033[2J") // clear the console
-	fmt.Println(rendered)        // draw the scene
+		for x, obj := range row {
+			cell := Render(obj)
+			termbox.SetCell(x+2, y+2, cell.Ch, cell.Fg, cell.Bg)
+		}
+
+		termbox.SetCell(s.Width+2, y+2, '┃', termbox.ColorWhite, termbox.ColorDefault)
+	}
+
+	// Bottom border
+	for i := 0; i <= s.Width+1; i++ {
+		switch {
+		case i == 0:
+			r = '┗'
+		case i > s.Width:
+			r = '┛'
+		default:
+			r = '━'
+		}
+		termbox.SetCell(i+1, s.Height+2, r, termbox.ColorWhite, termbox.ColorDefault)
+	}
+
+	termbox.Flush()
 
 	return nil
 }
 
-// Renders the game object given.
-func Render(o *models.GameObject) string {
+func Render(o *models.GameObject) termbox.Cell {
+	emptyCell := termbox.Cell{Ch: ' ', Fg: termbox.ColorDefault, Bg: termbox.ColorDefault}
 	if o == nil {
-		return " "
-	} else if player, ok := (*o).(*models.Player); ok {
-		if player.Colour == "red" {
-			return "\033[1m\033[31m░\033[0m\033[21m"
-		} else if player.Colour == "blue" {
-			return "\033[1m\033[34m░\033[0m\033[21m"
-		} else if player.Colour == "green" {
-			return "\033[1m\033[32m░\033[0m\033[21m"
-		} else if player.Colour == "orange" {
-			return "\033[1m\033[36m░\033[0m\033[21m"
-		} else {
-			return "░"
-		}
+		return emptyCell
+	} else if _, ok := (*o).(*models.Player); ok {
+		cell := termbox.Cell{Ch: '🐼', Fg: termbox.ColorDefault, Bg: termbox.ColorDefault}
+		// cell := termbox.Cell{Ch: '░', Fg: termbox.ColorDefault, Bg: termbox.ColorDefault}
+		return cell
 	} else {
-		return " "
+		return emptyCell
 	}
 }

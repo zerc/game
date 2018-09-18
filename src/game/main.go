@@ -8,6 +8,8 @@ import (
 	"game/renderers"
 	"log"
 	"net"
+
+	termbox "github.com/nsf/termbox-go"
 )
 
 var host = flag.String("h", "", "To connect to. For example: 127.0.0.1")
@@ -17,6 +19,11 @@ var colour = flag.String("c", "red", "Your colour. Choices are: red, blue, green
 var bot = flag.Bool("b", false, "Current client is a bot")
 
 func main() {
+	if err := termbox.Init(); err != nil {
+		panic(err)
+	}
+	defer termbox.Close()
+
 	flag.Parse()
 
 	IsServer := true
