@@ -8,7 +8,7 @@ import (
 
 type Player struct {
 	Name     string
-	Colour   string
+	Color    string
 	Scene    *Scene
 	Position *Position
 	Conn     *net.Conn
@@ -48,7 +48,7 @@ func (p *Player) Move(x, y int) bool {
 
 func (p *Player) GetPositionString() string {
 	if p.Position != nil {
-		return fmt.Sprintf("%s,%s,%d,%d\n", p.ID(), p.Colour, p.Position.x, p.Position.y)
+		return fmt.Sprintf("%s,%s,%d,%d\n", p.ID(), p.Color, p.Position.x, p.Position.y)
 	}
 
 	return ""

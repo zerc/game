@@ -5,59 +5,67 @@ import (
 	"fmt"
 	"game/inputs"
 	"game/models"
+	"game/network"
 	"game/renderers"
-	"log"
-	"net"
 
 	termbox "github.com/nsf/termbox-go"
 )
 
-var host = flag.String("h", "", "To connect to. For example: 127.0.0.1")
-var port = flag.String("p", "8088", "Port to connect to")
-var name = flag.String("n", "Player", "Your name")
-var colour = flag.String("c", "red", "Your colour. Choices are: red, blue, green, orange")
-var bot = flag.Bool("b", false, "Current client is a bot")
+// CLI flags
+// Either one of these should be defined.
+var serverHost = flag.String("s", "", "IP address to create a server on. Example: 127.0.0.1")
+var clientHost = flag.String("c", "", "IP address of the server to connect to. Example: 127.0.0.1")
+
+// Optional flags
+var playerName = flag.String("n", "Player", "Your name")
+var isBot = flag.Bool("b", false, "Current player is a bot")
 
 func main() {
+	var (
+		isServer bool
+		host     string
+	)
+
+	// Parse and validate CLI flags.
+	flag.Parse()
+	if *serverHost != "" {
+		isServer = true
+		host = *serverHost
+	} else if *clientHost != "" {
+		isServer = false
+		host = *clientHost
+	} else {
+		panic(fmt.Errorf("Either '-s' or '-c' options should be provided."))
+	}
+
 	if err := termbox.Init(); err != nil {
 		panic(err)
 	}
-	defer termbox.Close()
-
-	flag.Parse()
-
-	IsServer := true
-	if *host != "" {
-		IsServer = false
-	}
 
 	scene := CreateScene(20, 5)
-	player := models.Player{Name: *name, Colour: *colour, Scene: scene, Conn: nil}
+	player := models.Player{Name: *playerName, Color: "", Scene: scene, Conn: nil}
 	player.Move(1, 1)
 
 	renderer := renderers.Console{}
-	defer renderer.DrawText("Thanks for playing the game!")
 	go renderer.Start(scene)
 
-	if IsServer {
-		go InitServer(scene, fmt.Sprintf(":%s", *port))
-		go InitServerTwo(scene)
+	// Register cleanup actions
+	defer func(player *models.Player) {
+		termbox.Close()
+		renderer.DrawText("Thanks for playing the game!")
+
+		if player.Conn != nil {
+			(*player.Conn).Close()
+		}
+	}(&player)
+
+	if isServer {
+		network.InitServer(scene, host)
 	} else {
-		player.Conn = InitClient(&player, host, port)
-		defer (*player.Conn).Close()
-
-		go func(scene *models.Scene, host *string) {
-			conn, err := net.Dial("tcp", fmt.Sprintf("%s:%s", *host, "8089"))
-			if err != nil {
-				log.Fatal(err)
-			}
-
-			AddNewPlayer(conn, scene)
-
-		}(scene, host)
+		network.InitClient(&player, host)
 	}
 
-	if *bot {
+	if *isBot {
 		InitBot(&player)
 	} else {
 		inputs.BindKeyboardInput(&player)

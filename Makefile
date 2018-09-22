@@ -10,4 +10,4 @@ install:
 	cd src/game && dep ensure
 
 run: build
-	./bin/game
+	./bin/game -s 127.0.0.1
