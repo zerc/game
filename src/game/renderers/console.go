@@ -8,6 +8,15 @@ import (
 	termbox "github.com/nsf/termbox-go"
 )
 
+var AvatarsToIcon = map[string]rune{
+	"panda":   '🐼',
+	"penguin": '🐧',
+	"zombie":  '🧟',
+	"ghost":   '👻',
+	"alien":   '👾',
+	"robot":   '🤖',
+}
+
 // Renders everything to the terminal's stdout.
 type Console struct {
 }
@@ -78,9 +87,8 @@ func Render(o *models.GameObject) termbox.Cell {
 	emptyCell := termbox.Cell{Ch: ' ', Fg: termbox.ColorDefault, Bg: termbox.ColorDefault}
 	if o == nil {
 		return emptyCell
-	} else if _, ok := (*o).(*models.Player); ok {
-		cell := termbox.Cell{Ch: '🐼', Fg: termbox.ColorDefault, Bg: termbox.ColorDefault}
-		// cell := termbox.Cell{Ch: '░', Fg: termbox.ColorDefault, Bg: termbox.ColorDefault}
+	} else if p, ok := (*o).(*models.Player); ok {
+		cell := termbox.Cell{Ch: AvatarsToIcon[p.Avatar], Fg: termbox.ColorDefault, Bg: termbox.ColorDefault}
 		return cell
 	} else {
 		return emptyCell

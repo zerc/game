@@ -73,12 +73,12 @@ func addNewPlayer(scene *models.Scene, conn net.Conn) {
 				continue
 			}
 
-			id, colour := chunks[0], chunks[1]
+			id, avatar := chunks[0], chunks[1]
 			x, _ := strconv.Atoi(chunks[2])
 			y, _ := strconv.Atoi(chunks[3])
 
 			if scene.Index[id] == nil {
-				player = &models.Player{Name: id, Color: colour, Scene: scene}
+				player = &models.Player{Name: id, Avatar: avatar, Scene: scene}
 			} else {
 				player = scene.Index[id]
 			}

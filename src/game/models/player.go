@@ -8,7 +8,7 @@ import (
 
 type Player struct {
 	Name     string
-	Color    string
+	Avatar   string // Name of the asset to render to the player
 	Scene    *Scene
 	Position *Position
 	Conn     *net.Conn
@@ -32,6 +32,7 @@ func (p *Player) Move(x, y int) bool {
 		p.Position = &newPosition
 
 		// If there is an active connection - send the data to it.
+		// TODO: use a queue?
 		if p.Conn != nil {
 			_, err := fmt.Fprintf(*p.Conn, p.GetPositionString())
 
@@ -46,9 +47,10 @@ func (p *Player) Move(x, y int) bool {
 	return false
 }
 
+// TODO: move it into separate object which will serialize the scene instead.
 func (p *Player) GetPositionString() string {
 	if p.Position != nil {
-		return fmt.Sprintf("%s,%s,%d,%d\n", p.ID(), p.Color, p.Position.x, p.Position.y)
+		return fmt.Sprintf("%s,%s,%d,%d\n", p.ID(), p.Avatar, p.Position.x, p.Position.y)
 	}
 
 	return ""

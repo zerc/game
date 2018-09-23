@@ -9,6 +9,7 @@ import (
 	"game/renderers"
 	"log"
 	"os"
+	"strings"
 
 	termbox "github.com/nsf/termbox-go"
 )
@@ -21,6 +22,7 @@ var clientHost = flag.String("c", "", "IP address of the server to connect to. E
 // Optional flags
 var playerName = flag.String("n", "Player", "Your name")
 var isBot = flag.Bool("b", false, "Current player is a bot")
+var avatar = flag.String("a", "panda", fmt.Sprintf("Select your avatar. Choices are:\n\t%s", strings.Join(models.GetAvatarChoices(), ", ")))
 
 func init() {
 	// Setup the logger
@@ -51,13 +53,16 @@ func main() {
 	} else {
 		panic(fmt.Errorf("Either '-s' or '-c' options should be provided."))
 	}
+	if models.Avatars[*avatar] == "" {
+		panic(fmt.Errorf("Invalid avatar selected. Use -h to see available choices"))
+	}
 
 	if err := termbox.Init(); err != nil {
 		panic(err)
 	}
 
 	scene := CreateScene(20, 5)
-	player := models.Player{Name: *playerName, Color: "", Scene: scene, Conn: nil}
+	player := models.Player{Name: *playerName, Avatar: (*avatar), Scene: scene, Conn: nil}
 	player.Move(1, 1)
 	log.SetPrefix(fmt.Sprintf("[%s] ", player.ID()))
 
