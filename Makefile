@@ -10,5 +10,5 @@ install:
 	cd src/game && dep ensure
 
 run: build
-	rm debug.txt
+	rm -f debug.txt
 	./bin/game -s 127.0.0.1
