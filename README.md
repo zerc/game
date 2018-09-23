@@ -6,7 +6,7 @@ Different stages of the project shall be described in separate articles within `
 
 A quick demo of the latest build:
 
-![demo](docs/demo1.gif)
+![demo](docs/demo-v01.gif)
 
 # Articles
 
