@@ -19,3 +19,5 @@ src/*/vendor/*
 
 # May contain private information
 docker-compose.yml
+
+debug.txt

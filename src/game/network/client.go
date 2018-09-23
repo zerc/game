@@ -9,34 +9,34 @@ import (
 
 func InitClient(player *models.Player, host string) {
 	addr := net.JoinHostPort(host, readPort)
-	log.Printf("[Client.Sender] making a connection to %s", addr)
+	log.Printf("Client is making a connection to %s", addr)
 
 	conn, err := net.Dial("tcp", addr)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	log.Println("[Client.Sender] connected")
+	log.Printf("Client is connected")
 	fmt.Fprintf(conn, player.GetPositionString())
 
 	// All the events will be dublicated to the connection associated
 	// TODO: use a queue to dispatch events
 	player.Conn = &conn
 
-	initClientReader(player.Scene, host)
+	initClientReader(player, host)
 }
 
 // initReader connects to the host and reads snapshots from it.
-func initClientReader(scene *models.Scene, host string) {
+func initClientReader(player *models.Player, host string) {
 	addr := net.JoinHostPort(host, sendPort)
-	log.Printf("[Client.Reader] making a connection to %s", addr)
+	log.Printf("[Reader] Client is making a connection to %s", addr)
 
 	conn, err := net.Dial("tcp", addr)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	log.Println("[Client.Reader] connected")
+	log.Printf("[Reader] Client is connected")
 
-	go addNewPlayer(scene, conn)
+	go addNewPlayer(player.Scene, conn)
 }

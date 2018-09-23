@@ -7,6 +7,8 @@ import (
 	"game/models"
 	"game/network"
 	"game/renderers"
+	"log"
+	"os"
 
 	termbox "github.com/nsf/termbox-go"
 )
@@ -19,6 +21,18 @@ var clientHost = flag.String("c", "", "IP address of the server to connect to. E
 // Optional flags
 var playerName = flag.String("n", "Player", "Your name")
 var isBot = flag.Bool("b", false, "Current player is a bot")
+
+func init() {
+	// Setup the logger
+	log.SetFlags(log.Ldate | log.Ltime | log.Lshortfile)
+	filename := "debug.txt"
+
+	logfile, err := os.OpenFile(filename, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0644)
+	if err != nil {
+		panic(err)
+	}
+	log.SetOutput(logfile)
+}
 
 func main() {
 	var (
@@ -45,6 +59,7 @@ func main() {
 	scene := CreateScene(20, 5)
 	player := models.Player{Name: *playerName, Color: "", Scene: scene, Conn: nil}
 	player.Move(1, 1)
+	log.SetPrefix(fmt.Sprintf("[%s] ", player.ID()))
 
 	renderer := renderers.Console{}
 	go renderer.Start(scene)
