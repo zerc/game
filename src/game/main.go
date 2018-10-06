@@ -51,7 +51,7 @@ func main() {
 		isServer = false
 		host = *clientHost
 	} else {
-		panic(fmt.Errorf("Either '-s' or '-c' options should be provided."))
+		panic(fmt.Errorf("either '-s' or '-c' options should be provided"))
 	}
 	if models.Avatars[*avatar] == "" {
 		panic(fmt.Errorf("Invalid avatar selected. Use -h to see available choices"))

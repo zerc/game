@@ -5,14 +5,14 @@ import (
 	"time"
 )
 
-// Creates an empty scene
+// CreateScene creates an empty scene
 func CreateScene(width int, height int) *models.Scene {
 	matrix := [][]*models.GameObject{}
 
 	for i := 0; i < height; i++ {
 		tmp := make([]*models.GameObject, width)
 
-		for x, _ := range tmp {
+		for x := range tmp {
 			tmp[x] = nil
 		}
 
@@ -22,6 +22,7 @@ func CreateScene(width int, height int) *models.Scene {
 	return &models.Scene{Width: width, Height: height, Matrix: matrix, Index: make(map[string]*models.Player)}
 }
 
+// InitBot initiates simple bot which emulates another player
 func InitBot(player *models.Player) {
 	step := 1
 	x, y := 1, 1

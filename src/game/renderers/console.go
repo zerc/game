@@ -8,6 +8,7 @@ import (
 	termbox "github.com/nsf/termbox-go"
 )
 
+// AvatarsToIcon is a map from code to unicode representation
 var AvatarsToIcon = map[string]rune{
 	"panda":   '🐼',
 	"penguin": '🐧',
@@ -17,18 +18,18 @@ var AvatarsToIcon = map[string]rune{
 	"robot":   '🤖',
 }
 
-// Renders everything to the terminal's stdout.
+// Console renders everything to the terminal's stdout.
 type Console struct {
 }
 
-// Draws a text provided.
+// DrawText draws a text provided.
 func (c Console) DrawText(s string) error {
-	fmt.Println("\033[H\033[2J\n")
+	fmt.Println("\033[H\033[2J")
 	fmt.Println(s)
 	return nil
 }
 
-// Starts rendering the scene in the infinite loop.
+// Start starts rendering the scene in the infinite loop.
 func (c Console) Start(s *models.Scene) {
 	for {
 		c.Draw(s)
@@ -36,7 +37,7 @@ func (c Console) Start(s *models.Scene) {
 	}
 }
 
-// Draws the whole 2D scene.
+// Draw draws the whole 2D scene.
 func (c Console) Draw(s *models.Scene) error {
 	var r rune
 
@@ -83,6 +84,7 @@ func (c Console) Draw(s *models.Scene) error {
 	return nil
 }
 
+// Render renders a game object specified
 func Render(o *models.GameObject) termbox.Cell {
 	emptyCell := termbox.Cell{Ch: ' ', Fg: termbox.ColorDefault, Bg: termbox.ColorDefault}
 	if o == nil {
