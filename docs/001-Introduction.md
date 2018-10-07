@@ -27,7 +27,7 @@ Currently, this is the most interesting part for the project for me. I sure lear
 
 Let's look at the scheme to see how the current implementation works:
 
-![network](docs/network-002.png)
+![network](network-002.png)
 
 This implementation is far from ideal but it does work over lan network. The key problems here are:
 
