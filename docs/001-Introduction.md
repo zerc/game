@@ -35,7 +35,15 @@ This implementation is far from ideal but it does work over lan network. The key
 * Messages are in text format which is not very compact.
 * The snapshots of the scene (Channel B) are full i.e. in case when nothing is happening the server will send exactly the same data over and over again wasting the bandwidth. Furthermore, at some point this might be so big amount of data that it will take visible amount of time to send it over.
 
+All these decisions make it impossible to play the game through bad network connection. In the example below I have limited network speed to 10kbit/s and introduced a delay in 300ms (**TODO** explain how I did that):
+
+![bad-internet](10kbit-300ms.gif)
+
+As you can see, it is really easy to go out of sync. Mostly, this is because server constantly pushes its current state even though the client just sent an update.
+
 
 #### Steps for improvement
 
-**TODO**
+1. Implement custom protocol over **UDP**. (**TODO** explain why it is better).
+2. Pack the payload better e.g. via [MessagePack](https://msgpack.org/index.html) or the home-made one (maybe later).
+3. Send only delta state of the scene.
