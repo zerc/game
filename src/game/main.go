@@ -3,15 +3,11 @@ package main
 import (
 	"flag"
 	"fmt"
-	"game/inputs"
+	"game/environments"
 	"game/models"
-	"game/network"
-	"game/renderers"
 	"log"
 	"os"
 	"strings"
-
-	termbox "github.com/nsf/termbox-go"
 )
 
 // CLI flags
@@ -23,6 +19,7 @@ var clientHost = flag.String("c", "", "IP address of the server to connect to. E
 var playerName = flag.String("n", "Player", "Your name")
 var isBot = flag.Bool("b", false, "Current player is a bot")
 var avatar = flag.String("a", "panda", fmt.Sprintf("Select your avatar. Choices are:\n\t%s", strings.Join(models.GetAvatarChoices(), ", ")))
+var environment = flag.String("e", "terminal", "Select an environment to run the game: terminal or opengl")
 
 func init() {
 	// Setup the logger
@@ -57,37 +54,11 @@ func main() {
 		panic(fmt.Errorf("Invalid avatar selected. Use -h to see available choices"))
 	}
 
-	if err := termbox.Init(); err != nil {
-		panic(err)
-	}
-
-	scene := CreateScene(20, 5)
-	player := models.Player{Name: *playerName, Avatar: (*avatar), Scene: scene, Conn: nil}
-	player.Move(1, 1)
-	log.SetPrefix(fmt.Sprintf("[%s] ", player.ID()))
-
-	renderer := renderers.Console{}
-	go renderer.Start(scene)
-
-	// Register cleanup actions
-	defer func(player *models.Player) {
-		termbox.Close()
-		renderer.DrawText("Thanks for playing the game!")
-
-		if player.Conn != nil {
-			(*player.Conn).Close()
-		}
-	}(&player)
-
-	if isServer {
-		network.InitServer(scene, host)
+	if *environment == "terminal" {
+		environments.InitTerminal(isServer, host, *avatar, *playerName, *isBot)
+	} else if *environment == "opengl" {
+		environments.InitOpenGL(isServer, host, *avatar, *playerName, *isBot)
 	} else {
-		network.InitClient(&player, host)
-	}
-
-	if *isBot {
-		InitBot(&player)
-	} else {
-		inputs.BindKeyboardInput(&player)
+		panic(fmt.Errorf("Environment %v is not supported", *environment))
 	}
 }
