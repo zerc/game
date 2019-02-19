@@ -1,10 +1,8 @@
 package environments
 
 import (
-	"fmt"
 	"log"
 	"runtime"
-	"strings"
 
 	"github.com/go-gl/gl/v4.1-core/gl"
 	"github.com/go-gl/glfw/v3.2/glfw"
@@ -12,11 +10,12 @@ import (
 
 var (
 	vertices = []float32{
-		0, 0.5, 0,
-		-1, 0, 0,
-		0, -1, 0,
-		1, 0, 0,
-		0, 0, 0,
+		// positions   // texture coordinates
+		0, 0.5, 0, 1, 1,
+		-1, 0, 0, 0, 1,
+		0, -1, 0, 0, 0,
+		1, 0, 0, 1, 0,
+		0, 0, 0, 0.5, 0.5,
 	}
 
 	indexes = []uint32{
@@ -27,20 +26,31 @@ var (
 	vertexShaderSource = `
 		#version 410
 		layout (location = 0) in vec3 vp;
+		layout (location = 1) in vec2 aTexCoord;
+
+		out vec2 TexCoord;
+
 		void main() {
 			gl_Position = vec4(vp, 1.0);
+			TexCoord = aTexCoord;
 		}
 	` + "\x00"
 
 	fragmentShaderSource = `
 		#version 410
 		out vec4 frag_colour;
+
+		in vec2 TexCoord;
+
+		uniform sampler2D ourTexture;
+
 		void main() {
-			frag_colour = vec4(0.5, 29, 120, 171);
+			frag_colour = texture(ourTexture, TexCoord);
 		}
 	` + "\x00"
 )
 
+// frag_colour = vec4(0.5, 29, 120, 171);
 // InitOpenGL inits the game as OpenGL application.
 func InitOpenGL(isServer bool, host string, avatar string, name string, isBot bool) {
 	runtime.LockOSThread()
@@ -51,9 +61,13 @@ func InitOpenGL(isServer bool, host string, avatar string, name string, isBot bo
 	program := _initOpenGL()
 
 	vao := makeVao(vertices, indexes)
+	texture, err := LoadTexture("static/texture_02.jpg")
+	if err != nil {
+		panic(err)
+	}
 
 	for !window.ShouldClose() {
-		draw(window, program, vao)
+		render(window, program, vao, texture)
 	}
 }
 
@@ -65,12 +79,12 @@ func _initOpenGL() uint32 {
 	version := gl.GoStr(gl.GetString(gl.VERSION))
 	log.Printf("OpenGL version %v", version)
 
-	vertexShader, err := compileSharer(vertexShaderSource, gl.VERTEX_SHADER)
+	vertexShader, err := CompileShader(vertexShaderSource, gl.VERTEX_SHADER)
 	if err != nil {
 		panic(err)
 	}
 
-	fragmentShader, err := compileSharer(fragmentShaderSource, gl.FRAGMENT_SHADER)
+	fragmentShader, err := CompileShader(fragmentShaderSource, gl.FRAGMENT_SHADER)
 	if err != nil {
 		panic(err)
 	}
@@ -104,10 +118,11 @@ func initGlfw() *glfw.Window {
 	return window
 }
 
-func draw(window *glfw.Window, program uint32, vao uint32) {
+func render(window *glfw.Window, program uint32, vao uint32, texture uint32) {
 	gl.Clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 	gl.UseProgram(program)
 
+	gl.BindTexture(gl.TEXTURE_2D, texture)
 	gl.BindVertexArray(vao)
 	gl.DrawElements(gl.TRIANGLES, int32(len(indexes)), gl.UNSIGNED_INT, nil)
 
@@ -135,34 +150,14 @@ func makeVao(points []float32, indexes []uint32) uint32 {
 	gl.BindBuffer(gl.ELEMENT_ARRAY_BUFFER, ebo)
 	gl.BufferData(gl.ELEMENT_ARRAY_BUFFER, 4*len(indexes), gl.Ptr(indexes), gl.STATIC_DRAW)
 
-	gl.VertexAttribPointer(0, 3, gl.FLOAT, false, 0, nil)
+	gl.VertexAttribPointer(0, 3, gl.FLOAT, false, 20, nil)
 	gl.EnableVertexAttribArray(0)
+
+	gl.VertexAttribPointer(1, 2, gl.FLOAT, false, 20, nil)
+	gl.EnableVertexAttribArray(1)
 
 	gl.BindBuffer(gl.ARRAY_BUFFER, 0)
 	gl.BindVertexArray(0)
 
 	return vao
-}
-
-func compileSharer(source string, shaderType uint32) (uint32, error) {
-	shader := gl.CreateShader(shaderType)
-
-	csources, free := gl.Strs(source)
-	gl.ShaderSource(shader, 1, csources, nil)
-	free()
-	gl.CompileShader(shader)
-
-	var status int32
-	gl.GetShaderiv(shader, gl.COMPILE_STATUS, &status)
-	if status == gl.FALSE {
-		var logLen int32
-		gl.GetShaderiv(shader, gl.INFO_LOG_LENGTH, &logLen)
-
-		log := strings.Repeat("\x00", int(logLen+1))
-		gl.GetShaderInfoLog(shader, logLen, nil, gl.Str(log))
-
-		return 0, fmt.Errorf("failed to compile %v: %v", source, log)
-	}
-
-	return shader, nil
 }
