@@ -11,21 +11,22 @@ import (
 )
 
 var (
-	triangleOne = []float32{
+	vertices = []float32{
+		0, 0.5, 0,
 		-1, 0, 0,
 		0, -1, 0,
 		1, 0, 0,
+		0, 0, 0,
 	}
 
-	triangleTwo = []float32{
-		-1, 0, 0,
-		0, 0.5, 0,
-		0, 0, 0,
+	indexes = []uint32{
+		0, 1, 4, // first triangle
+		1, 2, 3, // second triangle
 	}
 
 	vertexShaderSource = `
 		#version 410
-		in vec3 vp;
+		layout (location = 0) in vec3 vp;
 		void main() {
 			gl_Position = vec4(vp, 1.0);
 		}
@@ -49,11 +50,10 @@ func InitOpenGL(isServer bool, host string, avatar string, name string, isBot bo
 
 	program := _initOpenGL()
 
-	vaoOne := makeVao(triangleOne)
-	vaoTwo := makeVao(triangleTwo)
+	vao := makeVao(vertices, indexes)
 
 	for !window.ShouldClose() {
-		draw(window, program, []uint32{vaoOne, vaoTwo})
+		draw(window, program, vao)
 	}
 }
 
@@ -104,32 +104,42 @@ func initGlfw() *glfw.Window {
 	return window
 }
 
-func draw(window *glfw.Window, program uint32, vaos []uint32) {
+func draw(window *glfw.Window, program uint32, vao uint32) {
 	gl.Clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 	gl.UseProgram(program)
 
-	for _, vao := range vaos {
-		gl.BindVertexArray(vao)
-		gl.DrawArrays(gl.TRIANGLES, 0, int32(len(triangleOne)/3))
-	}
+	gl.BindVertexArray(vao)
+	gl.DrawElements(gl.TRIANGLES, int32(len(indexes)), gl.UNSIGNED_INT, nil)
 
-	glfw.PollEvents()
 	window.SwapBuffers()
+	glfw.PollEvents()
 }
 
 // makeVao makes vertex array from the points provided.
-func makeVao(points []float32) uint32 {
-	var vbo uint32
+func makeVao(points []float32, indexes []uint32) uint32 {
+	var (
+		vao uint32
+		vbo uint32
+		ebo uint32
+	)
+
+	gl.GenVertexArrays(1, &vao)
 	gl.GenBuffers(1, &vbo)
+	gl.GenBuffers(1, &ebo)
+
+	gl.BindVertexArray(vao)
+
 	gl.BindBuffer(gl.ARRAY_BUFFER, vbo)
 	gl.BufferData(gl.ARRAY_BUFFER, 4*len(points), gl.Ptr(points), gl.STATIC_DRAW)
 
-	var vao uint32
-	gl.GenVertexArrays(1, &vao)
-	gl.BindVertexArray(vao)
-	gl.EnableVertexAttribArray(0)
-	gl.BindBuffer(gl.ARRAY_BUFFER, vbo)
+	gl.BindBuffer(gl.ELEMENT_ARRAY_BUFFER, ebo)
+	gl.BufferData(gl.ELEMENT_ARRAY_BUFFER, 4*len(indexes), gl.Ptr(indexes), gl.STATIC_DRAW)
+
 	gl.VertexAttribPointer(0, 3, gl.FLOAT, false, 0, nil)
+	gl.EnableVertexAttribArray(0)
+
+	gl.BindBuffer(gl.ARRAY_BUFFER, 0)
+	gl.BindVertexArray(0)
 
 	return vao
 }
