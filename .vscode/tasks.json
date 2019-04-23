@@ -1,0 +1,25 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "build",
+      "type": "shell",
+      "command": "g++.exe",
+      "args": [
+          "src/omega/main.cpp",
+          "-I",
+          "E:\\mingw\\mingw32\\include",
+          "-L",
+          "E:\\mingw\\mingw32\\lib",
+          "-o",
+          "bin/omega.exe",
+          "-lsfml-window",
+          "-lsfml-system"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    }
+  ]
+}
