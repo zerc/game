@@ -5,16 +5,25 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "cl.exe build and debug active file",
-            "type": "cppvsdbg",
+            "name": "g++.exe build and debug active file",
+            "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/bin/omega.exe",
             "args": [],
-            "stopAtEntry": true,
+            "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],
             "externalConsole": false,
-            //"preLaunchTask": "cl.exe build active file"
+            "MIMode": "gdb",
+            "miDebuggerPath": "E:/mingw/mingw32/bin/gdb.exe",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": "g++.exe build active file"
         }
     ]
 }
