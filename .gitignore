@@ -21,3 +21,4 @@ src/*/vendor/*
 docker-compose.yml
 
 debug.txt
+.vscode/ipch/*
