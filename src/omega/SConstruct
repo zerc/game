@@ -1,0 +1,6 @@
+Program(
+    'omega',
+    'main.cpp', 
+    parse_flags='-std=c++17 -lsfml-graphics -lsfml-window -lsfml-system', 
+    CPPPATH=['.', '/usr/local/lib/']
+)

@@ -1,3 +1,20 @@
+# INSTALL (MacOS)
+
+1. [Download SFML](https://www.sfml-dev.org/download/sfml/2.5.1/) and follow [the instructions](https://www.sfml-dev.org/tutorials/2.5/start-osx.php#installing-sfml)
+2. Install Python's virtual environment and install dependecies:
+
+```
+python3.7 -m venv venv
+. venv/bin/activate
+pip install -r requirements.txt
+```
+
+3. The build system is [SCons](https://scons.org/):
+
+```
+scons
+```
+
 # INSTALL (Windows)
 
 1. https://mingw-w64.org/doku.php (Install to the path without spaces e.g. E:\mingw\ and add its bin folder to your PATH - helps avoid a lot of shit)
