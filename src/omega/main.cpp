@@ -19,6 +19,14 @@ Objects:
 
     Vector - just to work with (x, y, z)
     Sphere - to represent an object (center, radius)
+    Light - to represent a source of light
+
+TODO:
+    * refactor the code, do not create the vertex array on every iteration, remove the implementation from headers etc
+    * modify the parameters without recompilation i.e. via JSON config file.
+        * https://github.com/dropbox/json11
+        * https://github.com/kazuho/picojson
+    * render poligons not spheres
 */
 
 void render(sf::RenderWindow& window)
