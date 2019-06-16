@@ -4,8 +4,8 @@
 #include <vector>
 #include "o_math.hpp"
 
-const float width    = 200;
-const float height   = 200;
+const float width    = 640;
+const float height   = 480;
 const float fov    = 1;  // tan(90/2) i.e. FOV is 90 degree
 auto aspect_ratio = width / height;
 
@@ -29,8 +29,11 @@ void render(sf::RenderWindow& window)
     omega::Vector origin(0, 0, 0);  // of the camera
 
     // Sphere
-    omega::Vector center(0, 0, -10); // WTF is this coordinates?
-    omega::Sphere sphere(center, 2);
+    omega::Vector center(0, 0, -3); // defined in the screen space coordinates?
+    omega::Sphere sphere(center, 1);
+
+    // Light
+    omega::Light light(-10, -10, -3, 2);
 
     // Cast rays
     for (size_t j = 0; j<height; j++) {
@@ -44,10 +47,14 @@ void render(sf::RenderWindow& window)
             float y = (1 - 2 * (j + 0.5) / height) * fov;
 
             omega::Vector dest(x, y, -1);
+            omega::Vector light_dir = (light.position - dest);
+            light_dir.Normalize();
             dest.Normalize();
 
             if (sphere.intersects(origin, dest)) {
+                auto intensity = (light.intensity * std::max(0.f, light_dir.Dot(dest)));
                 framebuffer[index].color = sf::Color::Red;
+                framebuffer[index].color.r = 255 * intensity;  // reduce the saturation to emulate shadow
             } else {
                 framebuffer[index].color = sf::Color::Blue;
             }

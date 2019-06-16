@@ -49,6 +49,13 @@ namespace omega {
             bool intersects(Vector& origin, Vector& dest);
     };
 
+    class Light {
+        public:
+            Light(const float x, const float y, const float z, const float i): position(x, y, z), intensity(i) {};
+            Vector position;
+            float intensity;
+    };
+
     /*
      * Returns either the vector given by (origin, dest) is intersecting with the shpere or not.
      * http://www.lighthouse3d.com/tutorials/maths/ray-sphere-intersection/ 
