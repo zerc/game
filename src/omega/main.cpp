@@ -4,10 +4,9 @@
 #include <vector>
 #include "o_math.hpp"
 
-const float width    = 640;
-const float height   = 480;
+const float init_width    = 640;
+const float init_height   = 480;
 const float fov    = 1;  // tan(90/2) i.e. FOV is 90 degree
-auto aspect_ratio = width / height;
 
 /*
 Logic:
@@ -24,7 +23,12 @@ Objects:
 
 void render(sf::RenderWindow& window)
 {
-    sf::VertexArray framebuffer(sf::Points, width*height);
+    auto size = window.getSize();
+    float width = size.x;
+    float height = size.y;
+    auto aspect_ratio = width / height;
+
+    sf::VertexArray framebuffer(sf::Points, width*height);  // reuse the buffer?
 
     omega::Vector origin(0, 0, 0);  // of the camera
 
@@ -66,7 +70,7 @@ void render(sf::RenderWindow& window)
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(width, height), "Test");
+    sf::RenderWindow window(sf::VideoMode(init_width, init_height), "Test");
 
     // run the program as long as the window is open
     while (window.isOpen())
@@ -80,8 +84,11 @@ int main()
                 window.close();
         }
 
+        window.resetGLStates();
         window.clear(sf::Color::Green);
-        render(window);
+        // the function should not accept "window" but instead work on updating the vertex array
+        // which should be created once...
+        render(window);  
         window.display();
     }
 
