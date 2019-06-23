@@ -24,6 +24,7 @@ Objects:
 TODO:
     * refactor the code, do not create the vertex array on every iteration, remove the implementation from headers etc
     * modify the parameters without recompilation i.e. via JSON config file.
+        * https://github.com/nlohmann/json
         * https://github.com/dropbox/json11
         * https://github.com/kazuho/picojson
     * render poligons not spheres
