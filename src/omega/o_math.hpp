@@ -18,6 +18,19 @@ namespace omega {
                 return Vector(x + v.x, y + v.y, z + v.z);
             };
 
+            Vector operator *(float t) {
+                return Vector(x*t, y*t, z*t);
+            }
+
+            // Calculates Cross product between current vector and the given one (v)
+            Vector Cross (const Vector& v) {
+                return Vector(
+                    y*v.z - z*v.y,
+                    z*v.x - x*v.z,
+                    x*v.y - y*v.x
+                );
+            };
+
             // Calculates dot product between current vector and the given one (v)
             float Dot (const Vector& v) {
                 return x*v.x + y*v.y + z*v.z;
@@ -78,5 +91,15 @@ namespace omega {
         }
 
         return true;
-    }
+    };
+
+    class Vertex {
+        Vector& A;
+        Vector& B;
+        Vector& C;
+
+        public:
+            Vertex (Vector& a, Vector& b, Vector& c) : A(a), B(b), C(c) {};
+            bool intersects(Vector& origin, Vector& dest);
+    };
 };

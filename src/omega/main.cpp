@@ -8,6 +8,57 @@ const float init_width    = 640;
 const float init_height   = 480;
 const float fov    = 1;  // tan(90/2) i.e. FOV is 90 degree
 
+
+/*
+ * https://www.scratchapixel.com/lessons/3d-basic-rendering/ray-tracing-rendering-a-triangle/ray-triangle-intersection-geometric-solution
+ */
+bool omega::Vertex::intersects (Vector& origin, Vector& dest) {
+    // Calculate the plan's normal
+    auto CA = C - A;
+    auto BA = B - A;
+    auto planes_normale = CA.Cross(BA);
+    planes_normale.Normalize();
+
+    auto distance_from_origin = planes_normale.Dot(A);
+    float t = (planes_normale.Dot(origin) + distance_from_origin) / planes_normale.Dot(dest);
+
+    if (t < 0) {
+        return false;  // the vertex is behind
+    }
+
+    omega::Vector P = origin + dest * t;
+
+    // Checking either the intersection point inside of the vertex or not
+    /* omega::Vector *C; // the vector which is perpendicular to the vertex's plane */
+
+    // We need to cross product between vectors constructed by:
+    // * vertexes edges i.e. CA, BC, AB
+    // * intersection point from the same point of the vertex i.e. PA, PC, PB
+    // All the dot products of between those vectors should be greater than 0 means the P
+    // stands on the left hand side -> inside of the triangle.
+    auto PA = P - A;
+    auto C1 = CA.Cross(PA);
+    if (planes_normale.Dot(C1) < 0) {
+        return false;
+    }
+
+    auto BC = B - C;
+    auto PC = P - C;
+    auto C2 = BC.Cross(PC);
+    if (planes_normale.Dot(C2) < 0) {
+        return false;
+    }
+
+    auto AB = A - B;
+    auto PB = P - B;
+    auto C3 = AB.Cross(PB);
+    if (planes_normale.Dot(C3) < 0) {
+        return false;
+    }
+
+    return true;
+}
+
 /*
 Logic:
 
@@ -45,6 +96,12 @@ void render(sf::RenderWindow& window)
     omega::Vector center(0, 0, -3); // defined in the screen space coordinates?
     omega::Sphere sphere(center, 1);
 
+    // Vertex
+    omega::Vector a = omega::Vector(-1, -1, -5);
+    omega::Vector b = omega::Vector(1, -1, -5);
+    omega::Vector c = omega::Vector(0, 1, -5);
+    omega::Vertex vertex1(a, b, c);
+
     // Light
     omega::Light light(-10, -10, -3, 2);
 
@@ -64,10 +121,11 @@ void render(sf::RenderWindow& window)
             light_dir.Normalize();
             dest.Normalize();
 
-            if (sphere.intersects(origin, dest)) {
-                auto intensity = (light.intensity * std::max(0.f, light_dir.Dot(dest)));
+            if (vertex1.intersects(origin, dest)) {
+            /* if (sphere.intersects(origin, dest)) { */
+                /* auto intensity = (light.intensity * std::max(0.f, light_dir.Dot(dest))); */
                 framebuffer[index].color = sf::Color::Red;
-                framebuffer[index].color.r = 255 * intensity;  // reduce the saturation to emulate shadow
+                /* framebuffer[index].color.r = 255 * intensity;  // reduce the saturation to emulate shadow */
             } else {
                 framebuffer[index].color = sf::Color::Blue;
             }
