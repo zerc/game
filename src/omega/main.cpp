@@ -102,6 +102,11 @@ void render(sf::RenderWindow& window)
     omega::Vector c = omega::Vector(0, 1, -5);
     omega::Vertex vertex1(a, b, c);
 
+    omega::Vector a1 = omega::Vector(1, -1, -5);
+    omega::Vector b1 = omega::Vector(0, 1, -5);
+    omega::Vector c1 = omega::Vector(1, 0, -5);
+    omega::Vertex vertex2(a1, b1, c1);
+
     // Light
     omega::Light light(-10, -10, -3, 2);
 
@@ -126,6 +131,8 @@ void render(sf::RenderWindow& window)
                 /* auto intensity = (light.intensity * std::max(0.f, light_dir.Dot(dest))); */
                 framebuffer[index].color = sf::Color::Red;
                 /* framebuffer[index].color.r = 255 * intensity;  // reduce the saturation to emulate shadow */
+            } else if (vertex2.intersects(origin, dest)) {
+                framebuffer[index].color = sf::Color::Yellow;
             } else {
                 framebuffer[index].color = sf::Color::Blue;
             }
