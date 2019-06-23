@@ -78,7 +78,7 @@ TODO:
         * https://github.com/nlohmann/json
         * https://github.com/dropbox/json11
         * https://github.com/kazuho/picojson
-    * render poligons not spheres
+    * render poligons not spheres. Support OBJ format: http://paulbourke.net/dataformats/obj/
 */
 
 void render(sf::RenderWindow& window)
