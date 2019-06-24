@@ -29,6 +29,29 @@ bool omega::Vertex::edge_intersects (Vector& origin, Vector& dest) {
     omega::Vector P = origin + dest * t;
 
     auto PA = P - A;
+    auto C1 = CA.Cross(PA);
+    if (planes_normale.Dot(C1) <= 0.05) {  // given that we use this metod after `intersects` i.e. we know that the P inside of the vertex
+        return true;
+    }
+
+    auto BC = B - C;
+    auto PC = P - C;
+    auto C2 = BC.Cross(PC);
+    if (planes_normale.Dot(C2) <= 0.05) {
+        return true;
+    }
+
+    auto AB = A - B;
+    auto PB = P - B;
+    auto C3 = AB.Cross(PB);
+    if (planes_normale.Dot(C3) <= 0.05) {
+        return true;
+    }
+
+    return false;
+
+    /*
+    auto PA = P - A;
     PA.Normalize();
     CA.Normalize();
     auto cos = CA.Dot(PA);
@@ -53,6 +76,7 @@ bool omega::Vertex::edge_intersects (Vector& origin, Vector& dest) {
     }
 
     return false;
+    */
 };
 
 /*
@@ -143,14 +167,14 @@ void render(sf::RenderWindow& window)
     omega::Sphere sphere(center, 1);
 
     // Vertex
-    omega::Vector a = omega::Vector(-1, -1, -5);
-    omega::Vector b = omega::Vector(1, -1, -5);
-    omega::Vector c = omega::Vector(0, 1, -5);
+    omega::Vector a = omega::Vector(-1, -1, -3);
+    omega::Vector b = omega::Vector(1, -1, -3);
+    omega::Vector c = omega::Vector(0, 1, -3);
     omega::Vertex vertex1(a, b, c);
 
-    omega::Vector a1 = omega::Vector(1, -1, -5);
-    omega::Vector b1 = omega::Vector(0, 1, -5);
-    omega::Vector c1 = omega::Vector(1, 0, -5);
+    omega::Vector a1 = omega::Vector(1, -1, -3);
+    omega::Vector b1 = omega::Vector(0, 1, -3);
+    omega::Vector c1 = omega::Vector(1, 0, -3);
     omega::Vertex vertex2(a1, b1, c1);
 
     // Light
