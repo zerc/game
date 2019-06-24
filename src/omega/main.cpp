@@ -30,7 +30,9 @@ bool omega::Vertex::edge_intersects (Vector& origin, Vector& dest) {
 
     auto PA = P - A;
     auto C1 = CA.Cross(PA);
-    if (planes_normale.Dot(C1) <= 0.05) {  // given that we use this metod after `intersects` i.e. we know that the P inside of the vertex
+    // given that we use this method after `intersects` i.e. we know that the P inside of the vertex
+    // so we just need to select the most "left" subset of points to draw an edge
+    if (planes_normale.Dot(C1) <= 0.05) {  
         return true;
     }
 
