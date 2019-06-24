@@ -101,5 +101,6 @@ namespace omega {
         public:
             Vertex (Vector& a, Vector& b, Vector& c) : A(a), B(b), C(c) {};
             bool intersects(Vector& origin, Vector& dest);
+            bool edge_intersects(Vector& origin, Vector& dest);
     };
 };

@@ -10,6 +10,52 @@ const float fov    = 1;  // tan(90/2) i.e. FOV is 90 degree
 
 
 /*
+ * Returns True when the ray lands on the edge of the vertex.
+ */
+bool omega::Vertex::edge_intersects (Vector& origin, Vector& dest) {
+    // Calculate the plan's normal
+    auto CA = C - A;
+    auto BA = B - A;
+    auto planes_normale = CA.Cross(BA);
+    planes_normale.Normalize();
+
+    auto distance_from_origin = planes_normale.Dot(A);
+    float t = (planes_normale.Dot(origin) + distance_from_origin) / planes_normale.Dot(dest);
+
+    if (t < 0) {
+        return false;  // the vertex is behind
+    }
+
+    omega::Vector P = origin + dest * t;
+
+    auto PA = P - A;
+    PA.Normalize();
+    CA.Normalize();
+    auto cos = CA.Dot(PA);
+    if (cos >= 0.999) {
+        return true;
+    }
+
+    auto BC = B - C;
+    auto PC = P - C;
+    BC.Normalize();
+    PC.Normalize();
+    cos = BC.Dot(PC);
+    if (cos >= 0.999) {
+        return true;
+    }
+
+    auto AB = A - B;
+    auto PB = P - B;
+    cos = AB.Dot(PB) / (AB.Magnitude() * PB.Magnitude());
+    if (cos >= 0.999) {  // since we call the method only for points inside the triangle we don't need to check the top end
+        return true;
+    }
+
+    return false;
+};
+
+/*
  * https://www.scratchapixel.com/lessons/3d-basic-rendering/ray-tracing-rendering-a-triangle/ray-triangle-intersection-geometric-solution
  */
 bool omega::Vertex::intersects (Vector& origin, Vector& dest) {
@@ -127,12 +173,22 @@ void render(sf::RenderWindow& window)
             dest.Normalize();
 
             if (vertex1.intersects(origin, dest)) {
+                if (vertex1.edge_intersects(origin, dest)) {
+                    framebuffer[index].color = sf::Color::Green;
+                } else {
+                    framebuffer[index].color = sf::Color::Red;
+                }
+
             /* if (sphere.intersects(origin, dest)) { */
-                /* auto intensity = (light.intensity * std::max(0.f, light_dir.Dot(dest))); */
-                framebuffer[index].color = sf::Color::Red;
-                /* framebuffer[index].color.r = 255 * intensity;  // reduce the saturation to emulate shadow */
+            /*     auto intensity = (light.intensity * std::max(0.f, light_dir.Dot(dest))); */
+            /*     framebuffer[index].color = sf::Color::Red; */
+            /*     framebuffer[index].color.r = 255 * intensity;  // reduce the saturation to emulate shadow */
             } else if (vertex2.intersects(origin, dest)) {
-                framebuffer[index].color = sf::Color::Yellow;
+                if (vertex2.edge_intersects(origin, dest)) {
+                    framebuffer[index].color = sf::Color::Green;
+                } else {
+                    framebuffer[index].color = sf::Color::Yellow;
+                }
             } else {
                 framebuffer[index].color = sf::Color::Blue;
             }
