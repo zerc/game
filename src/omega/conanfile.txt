@@ -1,5 +1,6 @@
 [requires]
 yaml-cpp/0.6.2@bincrafters/stable
+sfml/2.5.1@bincrafters/stable
 
 [generators]
 scons
