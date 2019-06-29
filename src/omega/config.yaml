@@ -1,0 +1,20 @@
+scene:
+    width: 100
+    height: 100
+    background: blue
+    objects:
+        -
+            name: Sphere 1
+            type: Sphere
+            properties:
+                centre: [1, 2, 3]
+                radius: 12
+
+        -
+            name: Something
+            type: Mech
+            properties:
+                material: metal
+                points:
+                    - [1, 2, 3]
+                    - [2, 3, 4]
