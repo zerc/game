@@ -1,29 +1,34 @@
 #include <iostream>
-#include <SFML/Window.hpp>
-#include <SFML/Graphics.hpp>
-#include <yaml-cpp/yaml.h>
+#include <string>
+/* #include "config.cpp" */
+#include "window.cpp"
 
 int main() {
-    sf::RenderWindow window(sf::VideoMode(100, 100), "Test");
+    auto raw_config = load_raw_config("config.yaml");
+    auto config = Config(raw_config);
 
-    // run the program as long as the window is open
-    while (window.isOpen())
-    {
-        // check all the window's events that were triggered since the last iteration of the loop
-        sf::Event event;
-        while (window.pollEvent(event))
-        {
-            // "close requested" event: we close the window
-            if (event.type == sf::Event::Closed)
-                window.close();
-        }
+    create_window(config);
 
-        window.resetGLStates();
-        window.clear(sf::Color::Green);
-        window.display();
-    }
+    /* sf::RenderWindow window(sf::VideoMode(100, 100), "Test"); */
 
-    YAML::Node config = YAML::LoadFile("config.yaml");
-    std::cout << config << std::endl;
+    /* // run the program as long as the window is open */
+    /* while (window.isOpen()) */
+    /* { */
+    /*     // check all the window's events that were triggered since the last iteration of the loop */
+    /*     sf::Event event; */
+    /*     while (window.pollEvent(event)) */
+    /*     { */
+    /*         // "close requested" event: we close the window */
+    /*         if (event.type == sf::Event::Closed) */
+    /*             window.close(); */
+    /*     } */
+
+    /*     window.resetGLStates(); */
+    /*     window.clear(sf::Color::Green); */
+    /*     window.display(); */
+    /* } */
+
+    /* YAML::Node config = YAML::LoadFile("config.yaml"); */
+    /* std::cout << config << std::endl; */
     return 0;
 }
