@@ -10,6 +10,7 @@ Config::Config(std::string& raw) {
 
     scene.width = node["scene"]["width"].as<float>();
     scene.height = node["scene"]["height"].as<float>();
+    scene.title = node["scene"]["title"].as<std::string>();
     scene.background = node["scene"]["background"].as<std::string>();
 };
 

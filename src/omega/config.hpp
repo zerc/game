@@ -7,6 +7,7 @@ int FILE_READ_ERROR = 2;
 struct Scene {
     float width;
     float height;
+    std::string title;
     std::string background;
 };
 
