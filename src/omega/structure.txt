@@ -1,0 +1,8 @@
+config.hpp (Interface of the Config class)
+ ^--- config.cpp (Implementation of the Config class)
+        ^
+        |
+        |        window.cpp (Implementation of the Window creation)
+        |            ^
+        |            |
+        ----------- main.cpp

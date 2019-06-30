@@ -1,6 +1,9 @@
 #include <string>
 #include <istream>
 
+int FILE_OPEN_ERROR = 1;
+int FILE_READ_ERROR = 2;
+
 struct Scene {
     float width;
     float height;

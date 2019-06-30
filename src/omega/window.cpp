@@ -1,10 +1,8 @@
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
 
-#include "config.cpp"
-
-void create_window(Config& config) {
-    sf::RenderWindow window(sf::VideoMode(config.scene.width, config.scene.height), "Test");
+void create_window(float width, float height) {
+    sf::RenderWindow window(sf::VideoMode(width, height), "Test");
 
     // run the program as long as the window is open
     while (window.isOpen())
@@ -18,7 +16,6 @@ void create_window(Config& config) {
                 window.close();
         }
 
-        // 
         window.resetGLStates();
         window.clear(sf::Color::Green);
         window.display();
