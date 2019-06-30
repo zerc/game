@@ -2,9 +2,9 @@
 
 class Window {
     protected:
-        bool alive;
+        bool alive = false;
 
     public:
-        bool is_alive() { return alive; }
+        virtual bool is_alive() =0;
         virtual void display() =0;
 };

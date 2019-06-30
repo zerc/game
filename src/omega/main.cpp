@@ -16,8 +16,8 @@ int main() {
     auto config = Config(*std::get_if<std::string>(&raw_config));
     auto window = create_window(config.scene.width, config.scene.height, config.scene.title);
         
-    while (window.is_alive()) {
-        window.display();
+    while (window->is_alive()) {
+        window->display();
     }
 
     return 0;

@@ -1,3 +1,4 @@
+#include <memory>
 #include <iostream>
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
@@ -18,7 +19,7 @@ class WindowSFML: public Window {
             delete window;
         }
 
-        bool is_alive();
+        bool is_alive() override;
         void display() override;
 };
 
@@ -47,7 +48,6 @@ void WindowSFML::display() {
 };
 
 
-WindowSFML create_window(float width, float height, std::string title) {
-    WindowSFML window(width, height, title);
-    return window;
+std::shared_ptr<Window> create_window(float width, float height, std::string title) {
+    return std::make_shared<WindowSFML>(width, height, title);
 };
