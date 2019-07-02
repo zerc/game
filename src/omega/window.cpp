@@ -1,29 +1,14 @@
 #include <memory>
-#include <iostream>
-#include <SFML/Window.hpp>
-#include <SFML/Graphics.hpp>
 
 #include "window.hpp"
 
-class WindowSFML: public Window {
-    protected:
-        sf::RenderWindow* window;
-
-    public:
-        WindowSFML(float width, float height, std::string title) {
-            window = new sf::RenderWindow(sf::VideoMode(width, height), title);
-            alive = true;
-        }
-
-        ~WindowSFML() {
-            delete window;
-        }
-
-        bool is_alive() override;
-        void display() override;
+Window::Window(float width, float height, std::string title) {
+    window = new sf::RenderWindow(sf::VideoMode(width, height), title);
+    alive = true;
 };
 
-bool WindowSFML::is_alive() {
+
+bool Window::is_alive() {
     if (!alive) {
         return false;
     }
@@ -41,13 +26,13 @@ bool WindowSFML::is_alive() {
 };
 
 
-void WindowSFML::display() {
+void Window::display() {
     window->resetGLStates();
     window->clear(sf::Color::Green);
     window->display();
 };
 
 
-std::shared_ptr<Window> create_window(float width, float height, std::string title) {
-    return std::make_shared<WindowSFML>(width, height, title);
+std::shared_ptr<WindowInterface> create_window(float width, float height, std::string title) {
+    return std::make_shared<Window>(width, height, title);
 };
