@@ -1,4 +1,3 @@
-#include <memory>
 #include <variant>
 #include <fstream>
 
@@ -12,6 +11,28 @@ Config::Config(std::string& raw) {
     scene.height = node["scene"]["height"].as<float>();
     scene.title = node["scene"]["title"].as<std::string>();
     scene.background = node["scene"]["background"].as<std::string>();
+
+    auto elements = node["scene"]["objects"];
+
+    for (auto i=0; i < elements.size(); i++) {
+        auto obj = node["scene"]["objects"][i];
+
+        auto tmp = std::make_shared<Object>();
+        tmp->name = obj["name"].as<std::string>();
+        tmp->type = obj["type"].as<std::string>();
+
+        if (obj["center"].IsSequence()) {
+            tmp->center.push_back(obj["center"][0].as<float>());
+            tmp->center.push_back(obj["center"][1].as<float>());
+            tmp->center.push_back(obj["center"][2].as<float>());
+        }
+
+        if (obj["radius"].IsDefined()) {
+            tmp->radius = obj["radius"].as<float>();
+        }
+
+        objects.push_back(tmp);
+    };
 };
 
 

@@ -6,16 +6,15 @@ scene:
     objects:
         -
             name: Sphere 1
-            type: Sphere
-            properties:
-                centre: [1, 2, 3]
-                radius: 12
+            type: sphere
+            material: metal
+            center: [1, 2, 3]
+            radius: 12
 
         -
             name: Something
-            type: Mech
-            properties:
-                material: metal
-                points:
-                    - [1, 2, 3]
-                    - [2, 3, 4]
+            type: mech
+            material: metal
+            points:
+                - [1, 2, 3]
+                - [2, 3, 4]

@@ -2,13 +2,14 @@
 
 class Vector {
     public:
-        float x, y z;
+        float x, y, z;
 
-        Vector() = default;
+        Vector() =default;
         Vector(float a, float b, float c) : x(a), y(b), z(c) {};
+        Vector(const std::vector<float> v) : x(v[0]), y(v[1]), z(v[2]) {};
 
         Vector operator -(const Vector& v) {
-            return Vector(x-v.x, y-v.y, z-z.y);
+            return Vector(x-v.x, y-v.y, z-v.y);
         };
 
         Vector operator +(const Vector& v) {
@@ -19,7 +20,7 @@ class Vector {
             return Vector(x*t, y*t, z*t);
         };
 
-        Vector CrossProduct (const Vector& v) {
+        Vector cross_product (const Vector& v) {
             return Vector(
                 y*v.z - z*v.y,
                 z*v.x - x*v.z,
@@ -27,11 +28,11 @@ class Vector {
             );
         };
 
-        Vector DotProduct (const Vector& v) {
-            return Vector(x*v.x + y*v.y + z*v.z);
+        float dot_product (const Vector& v) {
+            return x*v.x + y*v.y + z*v.z;
         };
 
-        Vector& Normalize() {
+        Vector& normalize() {
             float magnitude = std::sqrt(x*x + y*y + z*z);
             x = x/magnitude;
             y = y/magnitude;
