@@ -26,9 +26,19 @@ bool Window::is_alive() {
 };
 
 
-void Window::display() {
+int Window::get_width() const {
+    return window->getSize().x;
+};
+
+int Window::get_height() const {
+    return window->getSize().y;
+};
+
+
+void Window::display(const sf::VertexArray& framebuffer) {
     window->resetGLStates();
     window->clear(sf::Color::Green);
+    window->draw(framebuffer);
     window->display();
 };
 

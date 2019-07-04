@@ -4,6 +4,7 @@
 #include "config.cpp"
 #include "window.cpp"
 #include "objects.cpp"
+#include "raycaster.cpp"
 
 int main() {
     auto raw_config = load_raw_config("config.yaml");
@@ -20,13 +21,11 @@ int main() {
     std::vector<std::shared_ptr<BaseObject>> objects;
     create_objects(config.objects, objects);
 
-    for (auto i=0; i<objects.size(); i++) {
-        std::cout << i << std::endl;
-        std::cout << objects[i]->name << std::endl;
-    }
-        
+    RayCaster raycaster(window);
+
     while (window->is_alive()) {
-        window->display();
+        raycaster.cast_rays(objects);
+        window->display(raycaster.framebuffer);
     }
 
     return 0;

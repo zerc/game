@@ -10,8 +10,10 @@ class WindowInterface {
         bool alive = false;
 
     public:
+        virtual int get_width() const =0;
+        virtual int get_height() const =0;
         virtual bool is_alive() =0;
-        virtual void display() =0;
+        virtual void display(const sf::VertexArray& framebuffer) =0;
 };
 
 
@@ -29,8 +31,10 @@ class Window: public WindowInterface {
             delete window;
         };
 
+        int get_width() const override;
+        int get_height() const override;
         bool is_alive() override;
-        void display() override;
+        void display(const sf::VertexArray& framebuffer) override;
 
         bool something() {
             return false;
