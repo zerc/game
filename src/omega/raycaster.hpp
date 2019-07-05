@@ -5,7 +5,7 @@ class RayCasterInterface {
         const float FOV = 1;  // 1 == tan(90/2) i.e. FOV is 90 degree
 
     public:
-        virtual void cast_rays(const std::vector<std::shared_ptr<BaseObject>>& objects) =0;
+        virtual void cast_rays(const std::map<std::string,BaseObject*>& objects) =0;
 };
 
 
@@ -20,6 +20,6 @@ class RayCaster: public RayCasterInterface {
                 framebuffer.resize(width*height);
         };
 
-        void cast_rays(const std::vector<std::shared_ptr<BaseObject>>& objects) override;
+        void cast_rays(const std::map<std::string,BaseObject*>& objects) override;
 };
 

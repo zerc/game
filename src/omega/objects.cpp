@@ -18,14 +18,25 @@ bool Sphere::intersects(const Vector& origin, const Vector& dest) {
     return true;
 };
 
-void create_objects(const std::vector<std::shared_ptr<Object>>& raw, std::vector<std::shared_ptr<BaseObject>>& out) {
+void create_objects(
+    const std::vector<std::shared_ptr<Object>>& raw, 
+    std::map<std::string,BaseObject*>& out
+) {
     for (auto i=0; i < raw.size(); i++) {
         if (raw[i]->type == "sphere") {
-            out.push_back(std::make_shared<Sphere>(
-                raw[i]->name,
-                raw[i]->center,
-                raw[i]->radius
-            ));
+            auto search = out.find(raw[i]->name);
+
+            if (search != out.end()) {
+                auto s = (Sphere*) search->second;
+                s->center = raw[i]->center;
+                s->radius = raw[i]->radius;
+            } else {
+                out[raw[i]->name] = new Sphere(
+                    raw[i]->name,
+                    raw[i]->center,
+                    raw[i]->radius
+                );
+            };
         };
     };
 };

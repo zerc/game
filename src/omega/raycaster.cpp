@@ -1,9 +1,10 @@
 #include "raycaster.hpp"
 
-void RayCaster::cast_rays(const std::vector<std::shared_ptr<BaseObject>>& objects) {
+void RayCaster::cast_rays(const std::map<std::string,BaseObject*>& objects) {
     auto aspect_ratio = width / height;
     Vector origin(0, 0, 0);  // of the camera
-    
+    bool point_occupied = false;
+
     for (auto j = 0; j<height; j++) {
         for (auto i = 0; i<width; i++) {
             int index = i+j*width;
@@ -16,15 +17,17 @@ void RayCaster::cast_rays(const std::vector<std::shared_ptr<BaseObject>>& object
 
             Vector dest(x, y, -1);
             dest.normalize();
+            point_occupied = false;  // TODO: collisions?
 
-            for (auto z=0; z<objects.size(); z++) {
-                auto obj = objects[z];
-
-                if (obj->intersects(origin, dest)) {
+            for (const auto &pair : objects) {
+                if (pair.second->intersects(origin, dest)) {
                     framebuffer[index].color = sf::Color::Red;
-                } else {
-                    framebuffer[index].color = sf::Color::Blue;
+                    point_occupied = true;
                 }
+            }
+
+            if (!point_occupied) {
+                framebuffer[index].color = sf::Color::Blue;
             }
         }
     }
