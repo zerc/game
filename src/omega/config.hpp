@@ -1,3 +1,4 @@
+#include <list>
 #include <memory>
 #include <vector>
 #include <string>
@@ -20,7 +21,7 @@ class Object {
         std::string type;
         std::vector<float> center;
         float radius;
-        /* std::vector<std::vector<float>* > points; */
+        std::list<std::vector<float>> points;
 
         Object() = default;
 };

@@ -31,6 +31,21 @@ Config::Config(std::string& raw) {
             tmp->radius = obj["radius"].as<float>();
         }
 
+        if (obj["points"].IsDefined()) {
+
+            if (tmp->points.size() > 0) {
+                tmp->points.erase(tmp->points.begin());
+            }
+
+            for (const auto &row : obj["points"]) {
+                tmp->points.push_back(std::vector<float>{
+                    row[0].as<float>(),
+                    row[1].as<float>(),
+                    row[2].as<float>(),
+                });
+            }
+        }
+
         objects.push_back(tmp);
     };
 };
