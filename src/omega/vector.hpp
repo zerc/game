@@ -6,17 +6,22 @@ class Vector {
 
         Vector() =default;
         Vector(float a, float b, float c) : x(a), y(b), z(c) {};
+        Vector(const Vector& v) {
+            x = v.x;
+            y = v.y;
+            z = v.z;
+        };
         Vector(const std::vector<float> v) : x(v[0]), y(v[1]), z(v[2]) {};
 
         Vector operator -(const Vector& v) {
             return Vector(x-v.x, y-v.y, z-v.y);
         };
 
-        Vector operator +(const Vector& v) {
+        Vector operator +(const Vector& v) const {
             return Vector(x+v.x, y+v.y, z+v.z);
         }
 
-        Vector operator *(float t) {
+        Vector operator *(float t) const {
             return Vector(x*t, y*t, z*t);
         };
 

@@ -5,27 +5,10 @@ scene:
     background: blue
     objects:
         -
-            name: Sphere 1
-            type: sphere
-            material: metal
-            center: [-1, -1, -3]
-            radius: 1
-        -
-            name: Sphere 2
-            type: sphere
-            material: metal
-            center: [-1, 1, -2]
-            radius: 0.5
-        -
-            name: Sphere 3
-            type: sphere
-            material: metal
-            center: [1, 0, -5]
-            radius: 1.5
-        -
-            name: Something
-            type: mech
+            name: Triangle 1
+            type: triangle
             material: metal
             points:
-                - [1, 2, 3]
-                - [2, 3, 4]
+                - [-1, -1, -2]
+                - [1, -1, -2]
+                - [0, 1, -2]

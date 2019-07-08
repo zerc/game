@@ -6,9 +6,10 @@ conan = SConscript('build/SConscript_conan')
 if "sfml" in conan:
     conan['conan']['LIBS'].extend(['sfml-graphics', 'sfml-window', 'sfml-system'])
 
-env = Environment(**conan['conan'])
-env.Program(
-    'omega',
-    'main.cpp',
-    parse_flags='-std=c++17',
-)
+env_release = Environment(parse_flags='-std=c++17', **conan['conan'])
+env_debug = env_release.Clone(CCFLAGS='-g')
+
+env_release.Program('omega', 'main.cpp')
+
+d = env_debug.Object('omega-debug', 'main.cpp')
+env_debug.Program(d)
