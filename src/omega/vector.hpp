@@ -14,7 +14,7 @@ class Vector {
         Vector(const std::vector<float> v) : x(v[0]), y(v[1]), z(v[2]) {};
 
         Vector operator -(const Vector& v) {
-            return Vector(x-v.x, y-v.y, z-v.y);
+            return Vector(x-v.x, y-v.y, z-v.z);
         };
 
         Vector operator +(const Vector& v) const {

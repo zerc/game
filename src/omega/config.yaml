@@ -5,6 +5,12 @@ scene:
     background: blue
     objects:
         -
+            name: Sphere 1
+            type: sphere
+            material: wood
+            center: [-6, -2, -9]
+            radius: 3
+        -
             name: Triangle 1
             type: triangle
             material: metal
@@ -12,3 +18,11 @@ scene:
                 - [-1, -1, -2]
                 - [1, -1, -2]
                 - [0, 1, -2]
+        -
+            name: Triangle 2
+            type: triangle
+            material: metal
+            points:
+                - [0, 0, -3]
+                - [2, 0, -3]
+                - [1, 2, -3]
