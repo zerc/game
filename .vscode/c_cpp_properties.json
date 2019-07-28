@@ -20,7 +20,25 @@
                 ],
                 "limitSymbolsToIncludedHeaders": true,
                 "databaseFilename": ""
-            }
+            },
+            "configurationProvider": ""
+        },
+        {
+            "name": "Mac",
+            "includePath": [
+                "${workspaceFolder}/src/omega/**",
+                "/Users/zero13cool/.conan/data/yaml-cpp/0.6.2/bincrafters/stable/package/853c4b61e2571e98cd7b854c1cda6bc111b8b32c/include",
+                "/Users/zero13cool/.conan/data/sfml/2.5.1/bincrafters/stable/package/853c4b61e2571e98cd7b854c1cda6bc111b8b32c/include"
+            ],
+            "defines": [],
+            "macFrameworkPath": [
+                "/System/Library/Frameworks",
+                "/Library/Frameworks"
+            ],
+            "compilerPath": "/usr/bin/clang",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "clang-x64"
         }
     ],
     "version": 4

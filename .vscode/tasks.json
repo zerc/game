@@ -4,49 +4,29 @@
         {
             "label": "build",
             "type": "shell",
-            "command": "g++.exe",
-            "args": [
-                "src/omega/main.cpp",
-                "-I",
-                "E:/mingw/mingw32/include",
-                "-L",
-                "E:/mingw/mingw32/lib",
-                "-o",
-                "bin/omega.exe",
-                "-lsfml-graphics",
-                "-lsfml-window",
-                "-lsfml-system"
-            ],
-            "group": {
-                "kind": "build",
-                "isDefault": true
+            "command": "${workspaceFolder}/src/omega/venv/bin/scons",
+            "group": "build",
+            "args": [],
+            "options": {
+                "cwd": "${workspaceFolder}/src/omega/",
+                "env": {
+                    "PATH": "${workspaceFolder}/src/omega/venv/bin/:$PATH"
+                }
             }
         },
         {
-            "type": "process",
-            "label": "run",
-            "command": "bin/omega.exe"
-        },
-        {
-            "label": "build and run",
-            "dependsOn": ["build", "run"],
-        },
-        {
             "type": "shell",
-            "label": "g++.exe build active file",
-            "command": "g++.exe",
+            "label": "clang++ build active file",
+            "command": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
             "args": [
-                "src/omega/main.cpp",
-                "-I",
-                "E:/mingw/mingw32/include",
-                "-L",
-                "E:/mingw/mingw32/lib",
+                "-g",
+                "${file}",
                 "-o",
-                "bin/omega.exe",
-                "-lsfml-graphics",
-                "-lsfml-window",
-                "-lsfml-system"
-            ]
+                "${fileDirname}/${fileBasenameNoExtension}"
+            ],
+            "options": {
+                "cwd": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin"
+            }
         }
     ]
 }
