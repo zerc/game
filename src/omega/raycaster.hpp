@@ -21,5 +21,6 @@ class RayCaster: public RayCasterInterface {
         };
 
         void cast_rays(const std::map<std::string,BaseObject*>& objects) override;
-};
 
+        sf::Color get_color_for_material(const std::shared_ptr<Material> mat);
+};

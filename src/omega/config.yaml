@@ -1,27 +1,49 @@
+materials:
+    -
+        name: Red
+        color: 0
+
+    -
+        name: Yellow
+        color: 1
+
+    -
+        name: Green
+        color: 2
+
 scene:
     width: 640
     height: 480
     title: Omega
     background: blue
+
     objects:
+        -
+            name: Triangle 3
+            type: triangle
+            material: Yellow
+            points:
+                - [-2, 0, -2]
+                - [1, -1, -2]
+                - [0, 1, -2]
         -
             name: Sphere 1
             type: sphere
-            material: wood
-            center: [-6, -2, -9]
-            radius: 3
+            material: Yellow
+            center: [0, 1, -2]
+            radius: 0.5
         -
             name: Triangle 1
             type: triangle
-            material: metal
+            material: Green
             points:
-                - [-1, -1, -2]
+                - [-1, -2, -2]
                 - [1, -1, -2]
                 - [0, 1, -2]
         -
             name: Triangle 2
             type: triangle
-            material: metal
+            material: Red
             points:
                 - [0, 0, -3]
                 - [2, 0, -3]

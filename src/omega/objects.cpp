@@ -72,30 +72,30 @@ void create_objects(
 ) {
     for (auto i=0; i < raw.size(); i++) {
         if (raw[i]->type == "triangle") {
-            /* auto search = out.find(raw[i]->name); */
+            auto search = out.find(raw[i]->name);
 
-            /* if (search != out.end()) { */
-            /*     auto obj = (Triangle*) search->second; */
-            /*     int index = 0; */
+            if (search != out.end()) {
+                auto t = (Triangle*) search->second;
+                int index = 0;
 
-            /*     for (auto it = raw[i]->points.begin(); it != raw[i]->points.end(), it++) { */
-            /*         obj[index]->x = (*it)[0]; */
-            /*         index++; */
+                for (auto it = raw[i]->points.begin(); it != raw[i]->points.end(); it++) {
+                    // TODO: when I access attributes via "." it means the object
+                    // is not a pointer but a copy?
+                    t->at(index).x = (*it)[0];
+                    t->at(index).y = (*it)[1];
+                    t->at(index).z = (*it)[2];
+                    index++;
+                }
 
-            /*         if (index > 2) { */
-            /*             break;  // triangles don't have more than 3 elements */
-            /*         } */
-            /*     } */
-            /* } else { */
+            } else {
                 auto it = raw[i]->points.begin();
                 Vector A(*it);
                 it++;
                 Vector B(*it);
                 it++;
                 Vector C(*it);
-
-
-                out[raw[i]->name] = new Triangle(raw[i]->name, A, B, C);
+                out[raw[i]->name] = new Triangle(raw[i]->name, A, B, C, raw[i]->material);
+            }
         } else if (raw[i]->type == "sphere") {
             auto search = out.find(raw[i]->name);
 
@@ -103,11 +103,13 @@ void create_objects(
                 auto s = (Sphere*) search->second;
                 s->center = raw[i]->center;
                 s->radius = raw[i]->radius;
+                s->material = raw[i]->material;
             } else {
                 out[raw[i]->name] = new Sphere(
                     raw[i]->name,
                     raw[i]->center,
-                    raw[i]->radius
+                    raw[i]->radius,
+                    raw[i]->material
                 );
             };
         };

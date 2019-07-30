@@ -4,10 +4,12 @@ class Sphere : public BaseObject {
         float radius;
 
         Sphere() = default;
-        Sphere(const std::string s, const Vector& c, float r) : center(c), radius(r) {
+        Sphere(const std::string s, const Vector& c, float r, std::shared_ptr<Material> mat) : center(c), radius(r) {
+            material = mat;
             name = s;
         }
-        Sphere(const std::string s, const std::vector<float> c, float r): center(c), radius(r) {
+        Sphere(const std::string s, const std::vector<float> c, float r, std::shared_ptr<Material> mat): center(c), radius(r) {
+            material = mat;
             name = s;
         }
 

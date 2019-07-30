@@ -1,5 +1,24 @@
 #include "raycaster.hpp"
 
+sf::Color RayCaster::get_color_for_material(const std::shared_ptr<Material> mat) {
+    auto c = mat->color;
+
+    switch (c)
+    {
+    case COLORS::RED:
+        return sf::Color::Red;
+
+    case COLORS::YELLOW:
+        return sf::Color::Yellow;
+
+    case COLORS::GREEN:
+        return sf::Color::Green;
+  
+    default:
+        return sf::Color::Black;
+    };
+}
+
 void RayCaster::cast_rays(const std::map<std::string,BaseObject*>& objects) {
     auto aspect_ratio = width / height;
     Vector origin(0, 0, 0);  // of the camera
@@ -21,13 +40,13 @@ void RayCaster::cast_rays(const std::map<std::string,BaseObject*>& objects) {
 
             for (const auto &pair : objects) {
                 if (pair.second->intersects(origin, dest)) {
-                    framebuffer[index].color = sf::Color::Red;
+                    framebuffer[index].color = get_color_for_material(pair.second->material);
                     point_occupied = true;
                 }
             }
 
             if (!point_occupied) {
-                framebuffer[index].color = sf::Color::Blue;
+                framebuffer[index].color = sf::Color::Blue;  // TODO: should be the colour of the scene
             }
         }
     }

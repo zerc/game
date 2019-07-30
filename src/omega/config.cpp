@@ -12,14 +12,34 @@ Config::Config(std::string& raw) {
     scene.title = node["scene"]["title"].as<std::string>();
     scene.background = node["scene"]["background"].as<std::string>();
 
+    auto mats = node["materials"];
+
+    for (auto i=0; i < mats.size(); i++) {
+        auto obj = mats[i];
+        auto n = obj["name"].as<std::string>();
+        auto c = obj["color"].as<int>();
+
+        materials.emplace(n, std::make_shared<Material>(n, c));
+    }
+
     auto elements = node["scene"]["objects"];
 
     for (auto i=0; i < elements.size(); i++) {
-        auto obj = node["scene"]["objects"][i];
+        auto obj = elements[i];
 
         auto tmp = std::make_shared<Object>();
         tmp->name = obj["name"].as<std::string>();
         tmp->type = obj["type"].as<std::string>();
+
+        auto m = obj["material"].as<std::string>();
+        auto it = materials.find(m);
+        if (it != materials.end()) {
+            tmp->material = it->second;
+        } else {
+            // No material - no object.
+            // Is `tmp` going to be removed alright?
+            continue;
+        }
 
         if (obj["center"].IsSequence()) {
             tmp->center.push_back(obj["center"][0].as<float>());
