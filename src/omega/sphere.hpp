@@ -13,5 +13,5 @@ class Sphere : public BaseObject {
             name = s;
         }
 
-        bool intersects(const Vector& origin, const Vector& dest);
+        bool intersects(const Vector& origin, const Vector& dest, bool edges);
 };

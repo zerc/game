@@ -32,7 +32,7 @@ int main() {
     auto updated = attrib.st_mtime;
 
     while (window->is_alive()) {
-        raycaster.cast_rays(objects);
+        raycaster.cast_rays(objects, config.scene);
         window->display(raycaster.framebuffer);
 
         stat("config.yaml", &attrib);

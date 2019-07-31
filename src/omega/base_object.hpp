@@ -3,5 +3,5 @@ class BaseObject {
         std::string name;
         std::shared_ptr<Material> material;
 
-        virtual bool intersects(const Vector& origin, const Vector& dest) =0;
+        virtual bool intersects(const Vector& origin, const Vector& dest, bool edges) =0;
 };

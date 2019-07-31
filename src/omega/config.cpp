@@ -11,6 +11,7 @@ Config::Config(std::string& raw) {
     scene.height = node["scene"]["height"].as<float>();
     scene.title = node["scene"]["title"].as<std::string>();
     scene.background = node["scene"]["background"].as<std::string>();
+    scene.edges = node["scene"]["edges"].as<bool>();
 
     auto mats = node["materials"];
 

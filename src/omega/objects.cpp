@@ -1,7 +1,7 @@
 #include "objects.hpp"
 #include "triangle.hpp"
 
-bool Sphere::intersects(const Vector& origin, const Vector& dest) {
+bool Sphere::intersects(const Vector& origin, const Vector& dest, bool edges) {
     auto L = (center - origin);
     float tca = L.dot_product(dest);
 
@@ -19,7 +19,7 @@ bool Sphere::intersects(const Vector& origin, const Vector& dest) {
     return true;
 };
 
-bool Triangle::intersects(const Vector& origin, const Vector& dest) {
+bool Triangle::intersects(const Vector& origin, const Vector& dest, bool edges) {
     // Calculate the plan's normal
     auto CA = C - A;
     auto BA = B - A;
@@ -34,6 +34,7 @@ bool Triangle::intersects(const Vector& origin, const Vector& dest) {
     }
 
     Vector P = origin + dest * t;
+    float limit = edges ? 0.1 : 0;
 
     // Checking either the intersection point inside of the triangle or not
     /* Vector *C; // the vector which is perpendicular to the triangle's plane */
@@ -45,25 +46,25 @@ bool Triangle::intersects(const Vector& origin, const Vector& dest) {
     // stands on the left hand side -> inside of the triangle.
     auto PA = P - A;
     auto C1 = CA.cross_product(PA);
-    if (planes_normale.dot_product(C1) < 0) {
-        return false;
+    if (planes_normale.dot_product(C1) < limit) {
+        return edges;
     }
 
     auto BC = B - C;
     auto PC = P - C;
     auto C2 = BC.cross_product(PC);
-    if (planes_normale.dot_product(C2) < 0) {
-        return false;
+    if (planes_normale.dot_product(C2) < limit) {
+        return edges;
     }
 
     auto AB = A - B;
     auto PB = P - B;
     auto C3 = AB.cross_product(PB);
-    if (planes_normale.dot_product(C3) < 0) {
-        return false;
+    if (planes_normale.dot_product(C3) < limit) {
+        return edges;
     }
 
-    return true;
+    return !edges;
 };
 
 void create_objects(
@@ -77,6 +78,8 @@ void create_objects(
             if (search != out.end()) {
                 auto t = (Triangle*) search->second;
                 int index = 0;
+
+                t->material = raw[i]->material;
 
                 for (auto it = raw[i]->points.begin(); it != raw[i]->points.end(); it++) {
                     // TODO: when I access attributes via "." it means the object

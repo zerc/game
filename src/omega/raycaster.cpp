@@ -19,7 +19,7 @@ sf::Color RayCaster::get_color_for_material(const std::shared_ptr<Material> mat)
     };
 }
 
-void RayCaster::cast_rays(const std::map<std::string,BaseObject*>& objects) {
+void RayCaster::cast_rays(const std::map<std::string,BaseObject*>& objects, const Scene& scene) {
     auto aspect_ratio = width / height;
     Vector origin(0, 0, 0);  // of the camera
     bool point_occupied = false;
@@ -39,9 +39,11 @@ void RayCaster::cast_rays(const std::map<std::string,BaseObject*>& objects) {
             point_occupied = false;  // TODO: collisions?
 
             for (const auto &pair : objects) {
-                if (pair.second->intersects(origin, dest)) {
-                    framebuffer[index].color = get_color_for_material(pair.second->material);
-                    point_occupied = true;
+                if (!point_occupied && pair.second->intersects(origin, dest, false)) {
+                    if (!scene.edges || pair.second->intersects(origin, dest, scene.edges)) {
+                        framebuffer[index].color = get_color_for_material(pair.second->material);
+                        point_occupied = true;
+                    } 
                 }
             }
 

@@ -20,6 +20,7 @@ struct Scene {
     float height;
     std::string title;
     std::string background;
+    bool edges;
 };
 
 class Material {
