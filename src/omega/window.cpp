@@ -43,6 +43,8 @@ void Window::display(const sf::VertexArray& framebuffer) {
     window->clear(BACKGROUND);  // TODO: take it from config?
     window->draw(framebuffer);
     window->display();
+
+    incr_frames_count();
 };
 
 

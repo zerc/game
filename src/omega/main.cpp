@@ -1,3 +1,4 @@
+#include <ctime>
 #include <map>
 #include <iostream>
 #include <string>
@@ -8,6 +9,7 @@
 #include "window.cpp"
 #include "objects.cpp"
 #include "raycaster.cpp"
+#include "fps_counter.hpp"
 
 
 int main() {
@@ -26,6 +28,7 @@ int main() {
     create_objects(config.objects, objects);
 
     RayCaster raycaster(window);
+    FPSCounter fps_counter(window);
 
     struct stat attrib;
     stat("config.yaml", &attrib);
@@ -34,7 +37,9 @@ int main() {
     while (window->is_alive()) {
         raycaster.cast_rays(objects, config.scene);
         window->display(raycaster.framebuffer);
+        fps_counter.display();
 
+        // reload the config if changed
         stat("config.yaml", &attrib);
 
         if (attrib.st_mtime > updated) {
