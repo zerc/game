@@ -9,7 +9,7 @@ class Triangle : public BaseObject {
             name = s;
         }
 
-        bool intersects(const Vector& origin, const Vector& dest, bool edges);
+        float intersects(const Vector& origin, const Vector& dest, bool edges);
 
         Vector& operator [](int i) {
             if (i == 0) {

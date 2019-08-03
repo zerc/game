@@ -1,25 +1,26 @@
+#include <cmath>
 #include "objects.hpp"
 #include "triangle.hpp"
 
-bool Sphere::intersects(const Vector& origin, const Vector& dest, bool edges) {
+float Sphere::intersects(const Vector& origin, const Vector& dest, bool edges) {
     auto L = (center - origin);
     float tca = L.dot_product(dest);
 
     if (tca < 0) {
-        return false;
+        return -1;
     }
 
     float d = L.dot_product(L) - tca*tca;
     float r = radius * radius;
 
     if (d > r) {
-        return false;
+        return -1;
     }
 
-    return true;
+    return std::abs(L.z);
 };
 
-bool Triangle::intersects(const Vector& origin, const Vector& dest, bool edges) {
+float Triangle::intersects(const Vector& origin, const Vector& dest, bool edges) {
     // Calculate the plan's normal
     auto CA = C - A;
     auto BA = B - A;
@@ -30,7 +31,7 @@ bool Triangle::intersects(const Vector& origin, const Vector& dest, bool edges) 
     float t = (planes_normale.dot_product(origin) + distance_from_origin) / planes_normale.dot_product(dest);
 
     if (t < 0) {
-        return false;  // the triangle is behind
+        return -1; // the triangle is behind
     }
 
     Vector P = origin + dest * t;
@@ -47,24 +48,24 @@ bool Triangle::intersects(const Vector& origin, const Vector& dest, bool edges) 
     auto PA = P - A;
     auto C1 = CA.cross_product(PA);
     if (planes_normale.dot_product(C1) < limit) {
-        return edges;
+        return edges ? std::abs(P.z) : -1;
     }
 
     auto BC = B - C;
     auto PC = P - C;
     auto C2 = BC.cross_product(PC);
     if (planes_normale.dot_product(C2) < limit) {
-        return edges;
+        return edges ? std::abs(P.z) : -1;
     }
 
     auto AB = A - B;
     auto PB = P - B;
     auto C3 = AB.cross_product(PB);
     if (planes_normale.dot_product(C3) < limit) {
-        return edges;
+        return edges ? std::abs(P.z) : -1;
     }
 
-    return !edges;
+    return !edges ? std::abs(P.z) : -1;
 };
 
 void create_objects(
@@ -118,5 +119,3 @@ void create_objects(
         };
     };
 };
-
-

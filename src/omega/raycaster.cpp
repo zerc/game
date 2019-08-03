@@ -37,18 +37,36 @@ void RayCaster::cast_rays(const std::map<std::string,BaseObject*>& objects, cons
             Vector dest(x, y, -1);
             dest.normalize();
             point_occupied = false;  // TODO: collisions?
+            float depth = 9999;
 
             for (const auto &pair : objects) {
-                if (!point_occupied && pair.second->intersects(origin, dest, false)) {
-                    if (!scene.edges || pair.second->intersects(origin, dest, scene.edges)) {
-                        framebuffer[index].color = get_color_for_material(pair.second->material);
-                        point_occupied = true;
-                    } 
+                auto current_depth = pair.second->intersects(origin, dest, false);
+
+                if (current_depth < 0) {
+                    // nothing found
+                    continue;
                 }
+
+                if (scene.edges) {
+                    auto current_depth = pair.second->intersects(origin, dest, true);
+                    if (current_depth < 0) {
+                        // nothing found of an aedge
+                        continue;
+                    }
+                }
+
+                if (current_depth > depth) {
+                    // current point is behind
+                    continue;
+                }
+
+                depth = current_depth;
+                framebuffer[index].color = get_color_for_material(pair.second->material);
+                point_occupied = true;
             }
 
             if (!point_occupied) {
-                framebuffer[index].color = sf::Color::Blue;  // TODO: should be the colour of the scene
+                framebuffer[index].color = sf::Color::Transparent;
             }
         }
     }

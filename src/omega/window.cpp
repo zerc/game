@@ -2,6 +2,9 @@
 
 #include "window.hpp"
 
+static sf::Color BACKGROUND(174, 174, 174);
+
+
 Window::Window(float width, float height, std::string title) {
     window = new sf::RenderWindow(sf::VideoMode(width, height), title);
     alive = true;
@@ -37,7 +40,7 @@ int Window::get_height() const {
 
 void Window::display(const sf::VertexArray& framebuffer) {
     window->resetGLStates();
-    window->clear(sf::Color::Green);
+    window->clear(BACKGROUND);  // TODO: take it from config?
     window->draw(framebuffer);
     window->display();
 };
