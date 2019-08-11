@@ -2,6 +2,19 @@
     "version": "2.0.0",
     "tasks": [
         {
+            "label": "test",
+            "type": "shell",
+            "command": "${workspaceFolder}/src/omega/venv/bin/scons && ./omega-test",
+            "group": "test",
+            "args": [],
+            "options": {
+                "cwd": "${workspaceFolder}/src/omega/tests/",
+                "env": {
+                    "PATH": "${workspaceFolder}/src/omega/venv/bin/:$PATH"
+                }
+            }
+        },
+        {
             "label": "build",
             "type": "shell",
             "command": "${workspaceFolder}/src/omega/venv/bin/scons",

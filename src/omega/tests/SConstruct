@@ -1,0 +1,9 @@
+# Build tests
+import os
+
+Decider('timestamp-newer')
+
+conan = SConscript('../build/SConscript_conan')
+
+env = Environment(parse_flags='-std=c++17', **conan['Catch2'])
+env.Program('omega-test', Glob('test_*.cpp'))

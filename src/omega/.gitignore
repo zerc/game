@@ -7,3 +7,4 @@ venv/
 # Binaries
 omega
 omega-debug
+omega-test
