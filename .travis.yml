@@ -17,4 +17,5 @@ matrix:
               - conan install ..
               - cd ../tests/
               - scons
-              - ./omega-test
+
+          script: ./omega-test
