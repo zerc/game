@@ -1,6 +1,13 @@
-Program(
-    'omega',
-    'main.cpp', 
-    parse_flags='-std=c++17 -lsfml-graphics -lsfml-window -lsfml-system', 
-    CPPPATH=['.', '/usr/local/lib/']
-)
+import os
+
+Decider('timestamp-newer')
+
+conan = SConscript('build/SConscript_conan')
+
+env_release = Environment(parse_flags='-std=c++17', **conan['conan'])
+env_debug = env_release.Clone(CCFLAGS='-g')
+
+env_release.Program('omega', 'main.cpp')
+
+d = env_debug.Object('omega-debug', 'main.cpp')
+env_debug.Program(d)

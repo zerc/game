@@ -1,0 +1,13 @@
+matrix:
+    include:
+        - language: cpp
+          os: osx
+          install:
+              - cd src/omega/
+              - python3 -m venv venv
+              - pip install -r requirements.txt
+              - cd build
+              - conan install ..
+              - cd ../tests/
+              - scons
+              - ./omega-test
