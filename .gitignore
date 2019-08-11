@@ -20,5 +20,7 @@ src/*/vendor/*
 # May contain private information
 docker-compose.yml
 
+# Random
 debug.txt
 .vscode/ipch/*
+qt_creator_files/*

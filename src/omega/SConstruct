@@ -1,10 +1,8 @@
 import os
 
+Decider('timestamp-newer')
+
 conan = SConscript('build/SConscript_conan')
-# To install it via Conan you need to add Bintry to your remotes:
-# conan remote add public-conan https://api.bintray.com/conan/bincrafters/public-conan 
-if "sfml" in conan:
-    conan['conan']['LIBS'].extend(['sfml-graphics', 'sfml-window', 'sfml-system'])
 
 env_release = Environment(parse_flags='-std=c++17', **conan['conan'])
 env_debug = env_release.Clone(CCFLAGS='-g')

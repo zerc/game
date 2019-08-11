@@ -1,6 +1,9 @@
 venv/
 .sconsign.dblite
-omega
 
 # Object files
-main.o
+*.o
+
+# Binaries
+omega
+omega-debug
