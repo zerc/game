@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/zerc/egma.svg?branch=master)](https://travis-ci.org/zerc/egma)
+
 # Egma
 
 The word stands for `game` but with all consonants in the middle for fun purposes. The goal of the project is to learn how to implement a general purpose network engine for multiplayer games.
