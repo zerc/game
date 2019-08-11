@@ -10,7 +10,7 @@ matrix:
               - conan remote add public-conan https://api.bintray.com/conan/bincrafters/public-conan 
               - conan profile new default --detect
               - conan profile update settings.compiler=apple-clang default
-              - conan profile update settings.compiler.version=9.1.0 default
+              - conan profile update settings.compiler.version=9.1 default
               - conan profile update settings.compiler.libcxx=libc++ default
 
               - cd build
