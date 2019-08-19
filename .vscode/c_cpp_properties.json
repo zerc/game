@@ -9,8 +9,8 @@
             ],
             "cStandard": "c11",
             "cppStandard": "c++17",
-            "intelliSenseMode": "gcc-x64",
-            "compilerPath": "E:\\mingw\\mingw32\\bin\\g++.exe",
+            "intelliSenseMode": "msvc-x64",
+            "compilerPath": "\"C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\cl.exe\"",
             "includePath": [
                 "E:\\mingw\\mingw32\\include"
             ],
