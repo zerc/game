@@ -1,6 +1,9 @@
 venv/
 .sconsign.dblite
 
+# CLion's CMake builds
+cmake-build-*
+
 # Object files
 *.o
 
