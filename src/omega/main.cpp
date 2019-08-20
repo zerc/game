@@ -1,9 +1,10 @@
+#include <variant>
 #include <map>
 #include <iostream>
 #include <string>
 
 #include "utils/stat.h"
-#include "config.cpp"
+#include "config.hpp"
 #include "window.cpp"
 #include "objects.cpp"
 #include "raycaster.cpp"

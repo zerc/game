@@ -11,5 +11,10 @@ endif()
 
 add_subdirectory(tests)
 
-add_executable(omega main.cpp)
+set(SOURCE_FILES
+        main.cpp
+        config.cpp
+        )
+
+add_executable(omega ${SOURCE_FILES})
 target_link_libraries(omega ${CONAN_LIBS_SFML} ${CONAN_LIBS_YAML-CPP})
