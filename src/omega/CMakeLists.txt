@@ -14,6 +14,7 @@ add_subdirectory(tests)
 set(SOURCE_FILES
         main.cpp
         config.cpp
+        window.cpp
         )
 
 add_executable(omega ${SOURCE_FILES})

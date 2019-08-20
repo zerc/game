@@ -1,6 +1,10 @@
+#include <memory>
 #include <string>
+
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
+
+static sf::Color BACKGROUND(174, 174, 174);
 
 /*
  * Defines public interface to use within the application.
@@ -54,3 +58,5 @@ class Window: public WindowInterface {
         bool is_alive() override;
         void display(const sf::VertexArray& framebuffer) override;
 };
+
+std::shared_ptr<WindowInterface> create_window(float width, float height, std::string title);

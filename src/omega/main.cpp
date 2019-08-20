@@ -5,7 +5,7 @@
 
 #include "utils/stat.h"
 #include "config.hpp"
-#include "window.cpp"
+#include "window.hpp"
 #include "objects.cpp"
 #include "raycaster.cpp"
 #include "fps_counter.hpp"

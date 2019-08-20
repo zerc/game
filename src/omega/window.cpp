@@ -1,8 +1,4 @@
-#include <memory>
-
 #include "window.hpp"
-
-static sf::Color BACKGROUND(174, 174, 174);
 
 
 Window::Window(float width, float height, std::string title) {
@@ -16,7 +12,7 @@ bool Window::is_alive() {
         return false;
     }
     // check all the window's events that were triggered since the last iteration of the loop
-    sf::Event event;
+    sf::Event event{};
     while (window->pollEvent(event)) {
         // "close requested" event: we close the window
         if (event.type == sf::Event::Closed) {
