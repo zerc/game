@@ -15,7 +15,9 @@ set(SOURCE_FILES
         main.cpp
         config.cpp
         window.cpp
-        )
+        objects.cpp
+        triangle.cpp
+        vector.cpp)
 
 add_executable(omega ${SOURCE_FILES})
 target_link_libraries(omega ${CONAN_LIBS_SFML} ${CONAN_LIBS_YAML-CPP})

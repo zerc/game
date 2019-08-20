@@ -1,12 +1,8 @@
-#include <variant>
-#include <map>
 #include <iostream>
-#include <string>
 
 #include "utils/stat.h"
-#include "config.hpp"
+#include "objects.hpp"
 #include "window.hpp"
-#include "objects.cpp"
 #include "raycaster.cpp"
 #include "fps_counter.hpp"
 

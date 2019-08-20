@@ -1,6 +1,7 @@
-#ifndef CONFIG_H
-#define CONFIG_H
+#ifndef OMEGA_CONFIG_H
+#define OMEGA_CONFIG_H
 
+#include <variant>
 #include <map>
 #include <list>
 #include <memory>

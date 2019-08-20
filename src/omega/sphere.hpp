@@ -1,3 +1,6 @@
+#ifndef OMEGA_SPHERE_H
+#define OMEGA_SPHERE_H
+
 class Sphere : public BaseObject {
     public:
         Vector center;
@@ -15,3 +18,5 @@ class Sphere : public BaseObject {
 
         float intersects(const Vector& origin, const Vector& dest, bool edges);
 };
+
+#endif
