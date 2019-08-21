@@ -1,3 +1,6 @@
+#ifndef OMEGA_WINDOW_H
+#define OMEGA_WINDOW_H
+
 #include <memory>
 #include <string>
 
@@ -60,3 +63,5 @@ class Window: public WindowInterface {
 };
 
 std::shared_ptr<WindowInterface> create_window(float width, float height, std::string title);
+
+#endif

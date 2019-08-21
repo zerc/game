@@ -1,3 +1,4 @@
+#include "vector.hpp"
 #include "raycaster.hpp"
 
 sf::Color RayCaster::get_color_for_material(const std::shared_ptr<Material> mat) {
