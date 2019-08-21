@@ -8,7 +8,18 @@ conan = SConscript('build/SConscript_conan')
 
 env_release = Environment(tools=['mingw'], **conan['conan'])
 env_release.Append(CXXFLAGS='-std=c++17')
-env_release.Program('omega', 'main.cpp')
+
+SOURCE_FILES = [
+  'main.cpp',
+  'config.cpp',
+  'window.cpp',
+  'objects.cpp',
+  'triangle.cpp',
+  'vector.cpp',
+  'raycaster.cpp',
+]
+
+env_release.Program('omega', SOURCE_FILES)
 
 env_debug = env_release.Clone(CCFLAGS='-g')
 d = env_debug.Object('omega-debug', 'main.cpp')
