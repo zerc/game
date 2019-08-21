@@ -90,3 +90,4 @@ std::variant<std::string,int> load_raw_config(const std::string& filename) {
         return FILE_READ_ERROR;
     }
 };
+

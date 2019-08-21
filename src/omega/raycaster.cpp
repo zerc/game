@@ -1,3 +1,4 @@
+#include "vector.hpp"
 #include "raycaster.hpp"
 
 sf::Color RayCaster::get_color_for_material(const std::shared_ptr<Material> mat) {
@@ -20,7 +21,7 @@ sf::Color RayCaster::get_color_for_material(const std::shared_ptr<Material> mat)
 }
 
 void RayCaster::cast_rays(const std::map<std::string,BaseObject*>& objects, const Scene& scene) {
-    auto aspect_ratio = width / height;
+    float aspect_ratio = width / height;
     Vector origin(0, 0, 0);  // of the camera
     bool point_occupied = false;
 
@@ -31,16 +32,17 @@ void RayCaster::cast_rays(const std::map<std::string,BaseObject*>& objects, cons
 
             // Convert a pixel's coordinates to screen space with account for aspect ratio and FOV
             // https://www.scratchapixel.com/lessons/3d-basic-rendering/ray-tracing-generating-camera-rays/generating-camera-rays
-            float x = (2 * (i + 0.5) / width - 1) * aspect_ratio * FOV;
-            float y = (1 - 2 * (j + 0.5) / height) * FOV;
+            float x = (2 * (i + 0.5f) / width - 1) * aspect_ratio * FOV;
+            float y = (1 - 2 * (j + 0.5f) / height) * FOV;
 
             Vector dest(x, y, -1);
             dest.normalize();
             point_occupied = false;  // TODO: collisions?
             float depth = 9999;
+            float current_depth = 0;
 
             for (const auto &pair : objects) {
-                auto current_depth = pair.second->intersects(origin, dest, false);
+                current_depth = pair.second->intersects(origin, dest, false);
 
                 if (current_depth < 0) {
                     // nothing found
@@ -48,9 +50,9 @@ void RayCaster::cast_rays(const std::map<std::string,BaseObject*>& objects, cons
                 }
 
                 if (scene.edges) {
-                    auto current_depth = pair.second->intersects(origin, dest, true);
+                    current_depth = pair.second->intersects(origin, dest, true);
                     if (current_depth < 0) {
-                        // nothing found of an aedge
+                        // nothing found on the edge
                         continue;
                     }
                 }

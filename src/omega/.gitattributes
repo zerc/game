@@ -1,0 +1,7 @@
+*.cpp	text
+*.yaml	text
+*.hpp	text
+*.md	text
+
+*	text=auto
+

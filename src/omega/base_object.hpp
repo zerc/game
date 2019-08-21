@@ -1,3 +1,6 @@
+#ifndef OMEGA_BASE_OBJECTS_H
+#define OMEGA_BASE_OBJECTS_H
+
 class BaseObject {
     public:
         std::string name;
@@ -5,3 +8,5 @@ class BaseObject {
 
         virtual float intersects(const Vector& origin, const Vector& dest, bool edges) =0;
 };
+
+#endif

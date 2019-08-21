@@ -1,6 +1,4 @@
-#include <cmath>
 #include "objects.hpp"
-#include "triangle.hpp"
 
 float Sphere::intersects(const Vector& origin, const Vector& dest, bool edges) {
     auto L = (center - origin);

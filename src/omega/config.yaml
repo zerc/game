@@ -16,7 +16,7 @@ scene:
     height: 240
     title: Omega
     background: blue
-    edges: false
+    edges: true
 
     objects:
         -

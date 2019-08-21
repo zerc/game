@@ -1,3 +1,6 @@
+#ifndef OMEGA_TRIANGLE_H
+#define OMEGA_TRIANGLE_H
+
 class Triangle : public BaseObject {
     public:
         Vector A;
@@ -31,3 +34,5 @@ class Triangle : public BaseObject {
             }
         };
 };
+
+#endif

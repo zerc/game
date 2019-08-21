@@ -1,3 +1,7 @@
+#ifndef OMEGA_VECTOR_H
+#define OMEGA_VECTOR_H
+
+#include <vector>
 #include <cmath>
 
 class Vector {
@@ -46,10 +50,7 @@ class Vector {
         }
 };
 
-bool operator==(const Vector& lhs, const Vector& rhs) {
-    return lhs.x == rhs.x && lhs.y == rhs.y && lhs.z == rhs.z;
-};
+bool operator==(const Vector& lhs, const Vector& rhs);
+bool operator!=(const Vector& lhs, const Vector& rhs);
 
-bool operator!=(const Vector& lhs, const Vector& rhs) {
-    return !(lhs == rhs);
-};
+#endif

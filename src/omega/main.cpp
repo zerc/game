@@ -1,14 +1,9 @@
-#include <ctime>
-#include <map>
 #include <iostream>
-#include <string>
-#include <fstream>
 
 #include "utils/stat.h"
-#include "config.cpp"
-#include "window.cpp"
-#include "objects.cpp"
-#include "raycaster.cpp"
+#include "objects.hpp"
+#include "window.hpp"
+#include "raycaster.hpp"
 #include "fps_counter.hpp"
 
 
@@ -27,7 +22,7 @@ int main() {
     std::map<std::string,BaseObject*> objects;
     create_objects(config.objects, objects);
 
-    RayCaster raycaster(window);
+    RayCaster rayCaster(window);
     FPSCounter fps_counter(window);
 
     struct stat attrib;
@@ -35,8 +30,8 @@ int main() {
     auto updated = attrib.st_mtime;
 
     while (window->is_alive()) {
-        raycaster.cast_rays(objects, config.scene);
-        window->display(raycaster.framebuffer);
+        rayCaster.cast_rays(objects, config.scene);
+        window->display(rayCaster.framebuffer);
         fps_counter.display();
 
         // reload the config if changed

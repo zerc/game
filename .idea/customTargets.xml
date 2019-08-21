@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CLionExternalBuildManager">
+    <target id="66185001-199e-4df0-b564-2fb1eb91cdaa" name="Release" projectName="Omega">
+      <configuration id="ddbad3b4-d2ca-4840-a0f5-e5f1ab0bb983" name="Release">
+        <build type="TOOL">
+          <tool actionId="Tool_External Tools_Scons" />
+        </build>
+      </configuration>
+    </target>
+    <target id="daf426de-d339-4aed-b504-c39d20ea8889" name="Debug" projectName="Omega">
+      <configuration id="65da9b0a-6113-4b23-b71a-83cf3c531c9d" name="Debug">
+        <build type="TOOL">
+          <tool actionId="Tool_External Tools_Scons" />
+        </build>
+      </configuration>
+    </target>
+  </component>
+</project>

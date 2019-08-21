@@ -1,11 +1,17 @@
+#ifndef OMEGA_CONFIG_H
+#define OMEGA_CONFIG_H
+
+#include <variant>
+#include <map>
 #include <list>
 #include <memory>
+#include <utility>
 #include <vector>
 #include <string>
 #include <istream>
 
-int FILE_OPEN_ERROR = 1;
-int FILE_READ_ERROR = 2;
+static int FILE_OPEN_ERROR = 1;
+static int FILE_READ_ERROR = 2;
 
 namespace COLORS {
     enum color {
@@ -28,7 +34,7 @@ class Material {
         std::string name;
         int color;
 
-        Material(std::string name_, int color_) : name(name_), color(color_) {};
+        Material(std::string name_, int color_) : name(std::move(name_)), color(color_) {};
 };
 
 class Object {
@@ -49,5 +55,10 @@ class Config {
         std::vector<std::shared_ptr<Object>> objects;
         std::map<std::string, std::shared_ptr<Material>> materials;
         
-        Config(std::string& raw);
+        explicit Config(std::string& raw);
 };
+
+
+std::variant<std::string,int> load_raw_config(const std::string& filename);
+
+#endif

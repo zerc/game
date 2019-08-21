@@ -1,3 +1,13 @@
+#ifndef OMEGA_RAYCASTER_H
+#define OMEGA_RAYCASTER_H
+
+#include <SFML/Graphics/VertexArray.hpp>
+#include <memory>
+
+#include "config.hpp"
+#include "base_object.hpp"
+#include "window.hpp"
+
 class RayCasterInterface {
     protected:
         float width = 0;
@@ -13,7 +23,7 @@ class RayCaster: public RayCasterInterface {
     public:
         sf::VertexArray framebuffer;
 
-        RayCaster(const std::shared_ptr<WindowInterface> w) : framebuffer()  {
+        explicit RayCaster(const std::shared_ptr<WindowInterface> w) : framebuffer()  {
                 width = w->get_width();
                 height = w->get_height();
                 framebuffer.setPrimitiveType(sf::Points);
@@ -24,3 +34,5 @@ class RayCaster: public RayCasterInterface {
 
         sf::Color get_color_for_material(const std::shared_ptr<Material> mat);
 };
+
+#endif

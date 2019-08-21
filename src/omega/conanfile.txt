@@ -5,6 +5,7 @@ Catch2/2.9.2@catchorg/stable
 
 [generators]
 scons
+cmake
 
 [options]
 sfml:graphics=True
