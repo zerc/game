@@ -16,4 +16,4 @@ matrix:
 
               - mkdir _build && cd _build && cmake -G "Unix Makefiles" .. && make omega-tests
 
-          script: ../bin/omega-test
+          script: ./bin/omega-tests
