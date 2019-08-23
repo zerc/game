@@ -14,7 +14,7 @@ matrix:
               - conan profile update settings.compiler.libcxx=libc++ default
               - cd build && conan install ..
 
-              - cd .. && makedir _build && cd _build
+              - cd .. && mkdir _build && cd _build
               - cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang -G "Unix Makefiles" ..
               - make omega-tests
 
