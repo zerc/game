@@ -7,6 +7,7 @@ class BaseObject {
         std::shared_ptr<Material> material;
 
         virtual float intersects(const Vector& origin, const Vector& dest, bool edges) =0;
+        virtual void rotate(float angle) =0;
 };
 
 #endif

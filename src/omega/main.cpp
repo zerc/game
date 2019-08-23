@@ -1,4 +1,6 @@
 #include <iostream>
+#include <chrono>
+#include <thread>
 
 #include "utils/stat.h"
 #include "objects.hpp"
@@ -32,6 +34,11 @@ int main() {
     while (window->is_alive()) {
         rayCaster.cast_rays(objects, config.scene);
         window->display(rayCaster.framebuffer);
+
+        for (const auto &pair : objects) {
+            pair.second->rotate(10);
+        }
+
         fps_counter.display();
 
         // reload the config if changed
@@ -51,6 +58,8 @@ int main() {
 
             updated = attrib.st_mtime;
         }
+
+        std::this_thread::sleep_for(std::chrono::milliseconds(10));
     }
 
     return 0;

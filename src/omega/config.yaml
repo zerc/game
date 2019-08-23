@@ -19,12 +19,12 @@ scene:
     edges: true
 
     objects:
-        -
-            name: Sphere 1
-            type: sphere
-            material: Green
-            center: [-2, 2, -4]
-            radius: 1
+#        -
+#            name: Sphere 1
+#            type: sphere
+#            material: Green
+#            center: [2, 2, -4]
+#            radius: 1
         -
             name: Triangle 1
             type: triangle
