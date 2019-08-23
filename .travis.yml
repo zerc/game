@@ -12,10 +12,9 @@ matrix:
               - conan profile update settings.compiler=apple-clang default
               - conan profile update settings.compiler.version=9.1 default
               - conan profile update settings.compiler.libcxx=libc++ default
-              - cd build && conan install ..
-
-              - cd .. && mkdir _build && cd _build
-              - cmake -G "Unix Makefiles" ..
+              - cd build && conan install .. && cd ..
+              -
+              - cmake -G "Unix Makefiles" .
               - make omega-tests
 
-          script: ./bin/omega-test
+          script: ../bin/omega-test
