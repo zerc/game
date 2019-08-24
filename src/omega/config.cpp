@@ -50,7 +50,9 @@ Config::Config(std::string& raw) {
 
         if (obj["rotation"].IsDefined()) {
             auto r = obj["rotation"];
-            tmp->rotation = std::make_shared<Rotation>(r["type"].as<int>(), r["angle"].as<float>());
+            tmp->rotation = std::make_shared<Rotation>(
+                    r["type"].as<int>(), r["angle"].as<float>(),
+                    r["axis"][0].as<float>(), r["axis"][1].as<float>(), r["axis"][2].as<float>());
         } else {
             tmp->rotation = nullptr;
         }

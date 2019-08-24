@@ -137,28 +137,28 @@ Matrix3x3 getRotationMatrix(const std::shared_ptr<Rotation> rotation) {
     float c = std::cos(angle_rad);
     int t = rotation->getT();
 
-    if (t == TRANSFORMATIONS::ROTATE_X) {
-        return Matrix3x3(
-                1, 0, 0,
-                0, c, -s,
-                0, s, c
-        );
-    }
+    if (t == TRANSFORMATIONS::ROTATE_V) {
+        Vector v = Vector(rotation->x(), rotation->y(), rotation->z());
+        v.normalize();
 
-    if (t == TRANSFORMATIONS::ROTATE_Y) {
-       return Matrix3x3(
-               c, 0, s,
-               0, 1, 0,
-               -s, 0, c
-               );
-    }
+        // calculate intermediate variables
+        float d = 1.0f - c;
 
-    if (t == TRANSFORMATIONS::ROTATE_Z) {
+        float x = v.x * d;
+        float y = v.y * d;
+        float z = v.z * d;
+
+        float xy = x * v.y;
+        float xz = x * v.z;
+        float yz = y * v.z;
+
+
         return Matrix3x3(
-                c, -s, 0,
-                s, c, 0,
-                0, 0, 1
+                c + x * v.x, xy - s * v.z, xz + s * v.y,
+                xy + s * v.z, c + y * v.y, yz - s * v.x,
+                xz - s * v.y, yz + s * v.x, c + z * v.z
                 );
+
     }
 
     throw std::logic_error("Unknown transformation");

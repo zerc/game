@@ -24,9 +24,7 @@ namespace COLORS {
 
 namespace TRANSFORMATIONS {
     enum transformations {
-        ROTATE_X,
-        ROTATE_Y,
-        ROTATE_Z,
+        ROTATE_V, // rotation around arbitrary unit vector
     };
 }
 
@@ -51,9 +49,14 @@ class Rotation {
 private:
     int t;
     float angle;
+    float v[3];
 
 public:
-    Rotation(int t, float angle) : t(t), angle(angle) {}
+    Rotation(int t, float angle, float x, float y, float z) : t(t), angle(angle) {
+        v[0] = x;
+        v[1] = y;
+        v[2] = z;
+    }
 
     int getT() const {
         return t;
@@ -61,6 +64,18 @@ public:
 
     float getAngle() const {
         return angle;
+    }
+
+    float x() {
+        return v[0];
+    }
+
+    float y() {
+        return v[1];
+    }
+
+    float z() {
+        return v[2];
     }
 };
 
