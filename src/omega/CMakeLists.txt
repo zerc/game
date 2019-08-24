@@ -19,7 +19,7 @@ set(SOURCE_FILES
         triangle.cpp
         vector.cpp
         raycaster.cpp
-        )
+        matrix.cpp)
 
 add_executable(omega ${SOURCE_FILES})
 target_link_libraries(omega ${CONAN_LIBS_SFML} ${CONAN_LIBS_YAML-CPP})

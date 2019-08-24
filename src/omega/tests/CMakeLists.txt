@@ -7,6 +7,6 @@ set(TEST_SOURCE_FILES
 
         test_vector.cpp
         ../vector.cpp
-        )
+        ../matrix.cpp test_matrix.cpp)
 
 add_executable(omega-tests ${TEST_SOURCE_FILES})
