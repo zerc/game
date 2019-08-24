@@ -13,6 +13,10 @@ materials:
         name: Green
         color: 2
 
+    -
+        name: Cyan
+        color: 3
+
 scene:
     width: 320
     height: 240
@@ -21,12 +25,13 @@ scene:
     edges: true
 
     objects:
-#        -
-#            name: Sphere 1
-#            type: sphere
-#            material: Green
-#            center: [2, 2, -4]
-#            radius: 1
+        -
+            name: Sphere 1
+            type: sphere
+            material: Cyan
+            center: [-1, 1.5, -4]
+            radius: 1
+
         -
             name: Triangle 1
             type: triangle

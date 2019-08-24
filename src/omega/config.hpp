@@ -19,6 +19,7 @@ namespace COLORS {
         RED,
         YELLOW,
         GREEN,
+        CYAN,
     };
 };
 

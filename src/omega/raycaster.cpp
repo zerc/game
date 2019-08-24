@@ -14,7 +14,10 @@ sf::Color RayCaster::get_color_for_material(const std::shared_ptr<Material> mat)
 
     case COLORS::GREEN:
         return sf::Color::Green;
-  
+
+    case COLORS::CYAN:
+        return sf::Color::Cyan;
+
     default:
         return sf::Color::Black;
     };
