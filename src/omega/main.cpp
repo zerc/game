@@ -1,5 +1,4 @@
 #include <iostream>
-#include <chrono>
 #include <thread>
 
 #include "utils/stat.h"
@@ -8,6 +7,8 @@
 #include "raycaster.hpp"
 #include "fps_counter.hpp"
 
+
+void apply_transformations(std::map<std::string, BaseObject *> map);
 
 int main() {
     auto raw_config = load_raw_config("config.yaml");
@@ -34,10 +35,7 @@ int main() {
     while (window->is_alive()) {
         rayCaster.cast_rays(objects, config.scene);
         window->display(rayCaster.framebuffer);
-
-        for (const auto &pair : objects) {
-            pair.second->rotate(10);
-        }
+        apply_transformations(objects);
 
         fps_counter.display();
 
@@ -59,8 +57,9 @@ int main() {
             updated = attrib.st_mtime;
         }
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(10));
+        std::this_thread::sleep_for(config.getRenderDelay());
     }
 
     return 0;
 }
+

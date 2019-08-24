@@ -1,3 +1,5 @@
+#include <cmath>
+#include <exception>
 #include "objects.hpp"
 
 float Sphere::intersects(const Vector& origin, const Vector& dest, bool edges) {
@@ -79,6 +81,7 @@ void create_objects(
                 int index = 0;
 
                 t->material = raw[i]->material;
+                t->rotation = raw[i]->rotation;
 
                 for (auto it = raw[i]->points.begin(); it != raw[i]->points.end(); it++) {
                     // TODO: when I access attributes via "." it means the object
@@ -96,7 +99,7 @@ void create_objects(
                 Vector B(*it);
                 it++;
                 Vector C(*it);
-                out[raw[i]->name] = new Triangle(raw[i]->name, A, B, C, raw[i]->material);
+                out[raw[i]->name] = new Triangle(raw[i]->name, A, B, C, raw[i]->material, raw[i]->rotation);
             }
         } else if (raw[i]->type == "sphere") {
             auto search = out.find(raw[i]->name);
@@ -106,14 +109,58 @@ void create_objects(
                 s->center = raw[i]->center;
                 s->radius = raw[i]->radius;
                 s->material = raw[i]->material;
+                s->rotation = raw[i]->rotation;
             } else {
                 out[raw[i]->name] = new Sphere(
                     raw[i]->name,
                     raw[i]->center,
                     raw[i]->radius,
-                    raw[i]->material
+                    raw[i]->material,
+                    raw[i]->rotation
                 );
             };
         };
     };
 };
+
+
+void apply_transformations(std::map<std::string, BaseObject *> objects) {
+    for (const auto &pair : objects) {
+        pair.second->apply_rotation();
+    }
+}
+
+
+Matrix3x3 getRotationMatrix(const std::shared_ptr<Rotation> rotation) {
+    float angle_rad = (rotation->getAngle() * M_PI / 180.0f);
+    float s = std::sin(angle_rad);
+    float c = std::cos(angle_rad);
+    int t = rotation->getT();
+
+    if (t == TRANSFORMATIONS::ROTATE_X) {
+        return Matrix3x3(
+                1, 0, 0,
+                0, c, -s,
+                0, s, c
+        );
+    }
+
+    if (t == TRANSFORMATIONS::ROTATE_Y) {
+       return Matrix3x3(
+               c, 0, s,
+               0, 1, 0,
+               -s, 0, c
+               );
+    }
+
+    if (t == TRANSFORMATIONS::ROTATE_Z) {
+        return Matrix3x3(
+                c, -s, 0,
+                s, c, 0,
+                0, 0, 1
+                );
+    }
+
+    throw std::logic_error("Unknown transformation");
+}
+

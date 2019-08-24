@@ -1,6 +1,7 @@
 #ifndef OMEGA_CONFIG_H
 #define OMEGA_CONFIG_H
 
+#include <chrono>
 #include <variant>
 #include <map>
 #include <list>
@@ -21,6 +22,14 @@ namespace COLORS {
     };
 };
 
+namespace TRANSFORMATIONS {
+    enum transformations {
+        ROTATE_X,
+        ROTATE_Y,
+        ROTATE_Z,
+    };
+}
+
 struct Scene {
     float width;
     float height;
@@ -37,6 +46,25 @@ class Material {
         Material(std::string name_, int color_) : name(std::move(name_)), color(color_) {};
 };
 
+
+class Rotation {
+private:
+    int t;
+    float angle;
+
+public:
+    Rotation(int t, float angle) : t(t), angle(angle) {}
+
+    int getT() const {
+        return t;
+    }
+
+    float getAngle() const {
+        return angle;
+    }
+};
+
+
 class Object {
     public:
         std::string name;
@@ -45,17 +73,25 @@ class Object {
         float radius;
         std::list<std::vector<float>> points;
         std::shared_ptr<Material> material;
+        std::shared_ptr<Rotation> rotation;
 
         Object() = default;
 };
 
 class Config {
-    public:
-        Scene scene;
-        std::vector<std::shared_ptr<Object>> objects;
-        std::map<std::string, std::shared_ptr<Material>> materials;
-        
-        explicit Config(std::string& raw);
+private:
+    int render_delay; // delay to set between frames
+
+public:
+    Scene scene;
+    std::vector<std::shared_ptr<Object>> objects;
+    std::map<std::string, std::shared_ptr<Material>> materials;
+
+    explicit Config(std::string& raw);
+
+    std::chrono::milliseconds getRenderDelay() const {
+        return std::chrono::milliseconds(render_delay);
+    }
 };
 
 

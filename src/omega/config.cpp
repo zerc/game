@@ -13,6 +13,12 @@ Config::Config(std::string& raw) {
     scene.background = node["scene"]["background"].as<std::string>();
     scene.edges = node["scene"]["edges"].as<bool>();
 
+    if (node["render_delay"].IsDefined()) {
+        render_delay = node["render_delay"].as<int>();
+    } else {
+        render_delay = 0;
+    }
+
     auto mats = node["materials"];
 
     for (auto i=0; i < mats.size(); i++) {
@@ -42,6 +48,13 @@ Config::Config(std::string& raw) {
             continue;
         }
 
+        if (obj["rotation"].IsDefined()) {
+            auto r = obj["rotation"];
+            tmp->rotation = std::make_shared<Rotation>(r["type"].as<int>(), r["angle"].as<float>());
+        } else {
+            tmp->rotation = nullptr;
+        }
+
         if (obj["center"].IsSequence()) {
             tmp->center.push_back(obj["center"][0].as<float>());
             tmp->center.push_back(obj["center"][1].as<float>());
@@ -69,7 +82,7 @@ Config::Config(std::string& raw) {
 
         objects.push_back(tmp);
     };
-};
+}
 
 
 std::variant<std::string,int> load_raw_config(const std::string& filename) {

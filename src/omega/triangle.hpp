@@ -7,38 +7,21 @@ class Triangle : public BaseObject {
         Vector B;
         Vector C;
 
-        Triangle(const std::string s, Vector& a, Vector& b, Vector& c, std::shared_ptr<Material> mat) : A(a), B(b), C(c) {
+        Triangle(const std::string s, Vector& a, Vector& b, Vector& c, std::shared_ptr<Material> mat, std::shared_ptr<Rotation> rot) : A(a), B(b), C(c) {
             material = mat;
+            rotation = rot;
             name = s;
         }
 
         float intersects(const Vector& origin, const Vector& dest, bool edges);
 
-        void rotate(float angle) {
-            // ignore the parameter for now
-            float new_x = A.x * 0.996f + A.y * 0 + A.z * 0.087f;
-            float new_y = A.x * 0 + A.y * 1 + A.z * 0;
-            float new_z = A.x * -0.087f + A.y * 0 + A.z * 0.996f;
+        void apply_rotation() {
+            if (rotation == nullptr) return;
+            auto m = getRotationMatrix(rotation);
 
-            A.x = new_x;
-            A.y = new_y;
-            A.z = new_z;
-
-            new_x = B.x * 0.996f + B.y * 0 + B.z * 0.087f;
-            new_y = B.x * 0 + B.y * 1 + B.z * 0;
-            new_z = B.x * -0.087f + B.y * 0 + B.z * 0.996f;
-
-            B.x = new_x;
-            B.y = new_y;
-            B.z = new_z;
-
-            new_x = C.x * 0.996f + C.y * 0 + C.z * 0.087f;
-            new_y = C.x * 0 + C.y * 1 + C.z * 0;
-            new_z = C.x * -0.087f + C.y * 0 + C.z * 0.996f;
-
-            C.x = new_x;
-            C.y = new_y;
-            C.z = new_z;
+            A = m * A;
+            B = m * B;
+            C = m * C;
         }
 
         Vector& operator [](int i) {
