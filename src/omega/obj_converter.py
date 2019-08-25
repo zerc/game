@@ -1,6 +1,7 @@
 """
 Script to convert *.obj files to config.yaml
 """
+import io
 import sys
 import os
 
@@ -24,21 +25,20 @@ scene:
   height: 240
   title: Something
   background: blue
-  edges: true
+  edges: false
   objects:
 {objects}
 """.strip()
-
 
 OBJECT_TEMPLATE = """
     -
       name: {name}
       type: triangle
-      material: Red
+      material: {material}
       rotation:
         type: 0
         angle: 1
-        axis: [1, 0, 0]
+        axis: [0, 0, 1]
         apply_num: 360
       points:
         - [{p1[0]}, {p1[1]}, {p1[2]}]
@@ -47,16 +47,20 @@ OBJECT_TEMPLATE = """
 """
 
 # HACK: to include only faces specified (for debug purposes)
-#ONLY_FACES = [0, 2, 3, 4, 6, 8, 9, 10]
+# ONLY_FACES = [0, 2, 3, 4, 6, 8, 9, 10]
 ONLY_FACES = []
 
 
-def _get_raw(filename:str)->str:
-    with open(filename, "r") as f:
+# TODO: use to generate base template
+MATERIALS = ("Red", "Green", "Yellow", "Cyan")
+
+
+def _get_raw(fname: str) -> str:
+    with open(fname, "r") as f:
         return f.read()
 
 
-def _extract_vertexes(raw_data:str)->list:
+def _extract_vertexes(raw_data: str) -> list:
     result = []
 
     for row in raw_data.split('\n'):
@@ -66,40 +70,65 @@ def _extract_vertexes(raw_data:str)->list:
         # NOTE: currently, the renderer supports only rendering from the origin means if the
         # object has value for Z >= 0 - the viewport will be inside of it. So we move the object
         # further away.
-        points[-1] -= 1.5
+        points[-1] -= 2.5
         result.append(points)
 
     return result
 
 
-def _extract_faces(raw_data:str)->list:
+def _extract_faces(raw_data: str) -> list:
     return [
         # NOTE: in *.obj files indexes starts with 1 so we deduce 1 to make it easier to work with later
-        [int(c)-1 for c in row.replace('f ', '').split(' ')]
+        [int(c) - 1 for c in row.replace('f ', '').split(' ')]
         for row in raw_data.split('\n') if row.startswith('f ')
     ]
 
 
-def _render_template(vertexes:list, faces:list)->str:
+class MaterialGenerator:
+    def __init__(self):
+        self._iter = iter(MATERIALS)
+        self._curr = None
+
+    def get_for(self, i):
+        even = (i % 2 == 0)
+        if not even or self._curr is None:
+            self._rotate()
+        return self._curr
+
+    def _rotate(self):
+        try:
+            self._curr = next(self._iter)
+        except StopIteration:
+            self._iter = iter(MATERIALS)
+            self._curr = next(self._iter)
+
+
+def _render_template(vertexes: list, faces: list) -> str:
     objects = []
+    mat_generator = MaterialGenerator()
 
     for i, face in enumerate(faces):
         if ONLY_FACES and i not in ONLY_FACES:
             continue
         p1, p2, p3 = [vertexes[f] for f in face]
         name = f"t{i}"
-        objects.append(OBJECT_TEMPLATE.format(name=name, p1=p1, p2=p2, p3=p3))
+        mat = mat_generator.get_for(i)
+        objects.append(OBJECT_TEMPLATE.format(name=name, p1=p1, p2=p2, p3=p3, material=mat))
 
     return TEMPLATE.format(objects=''.join(objects))
 
 
-def main(filename:str):
-    raw_data = _get_raw(filename)
+def main(fname: str):
+    raw_data = _get_raw(fname)
     vertexes = _extract_vertexes(raw_data)
     faces = _extract_faces(raw_data)
     output = _render_template(vertexes, faces)
-    print(output)
 
+    with io.open('config.yaml', 'w', newline='\n') as f:
+        f.write(output)
+
+    written = len(output)
+    print(f'Done {written}')
 
 
 if __name__ == "__main__":

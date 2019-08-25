@@ -24,3 +24,4 @@ docker-compose.yml
 debug.txt
 .vscode/ipch/*
 qt_creator_files/*
+venv/*
