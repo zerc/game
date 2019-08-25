@@ -51,9 +51,11 @@ private:
     int t;
     float angle;
     float v[3];
+    int apply_num;  // how many time the rotation allowed to be applied; -1: disabled
+    int applied_num;  // the counter
 
 public:
-    Rotation(int t, float angle, float x, float y, float z) : t(t), angle(angle) {
+    Rotation(int t, float angle, float x, float y, float z) : t(t), angle(angle), apply_num(-1), applied_num(0) {
         v[0] = x;
         v[1] = y;
         v[2] = z;
@@ -77,6 +79,23 @@ public:
 
     float z() {
         return v[2];
+    }
+
+    int getApplyNum() const {
+        return apply_num;
+    }
+
+    void setApplyNum(int applyNum) {
+        apply_num = applyNum;
+    }
+
+    void markApplied() {
+        if (apply_num < 0) return;
+        applied_num++;
+    }
+
+    int getAppliedNum() const {
+        return applied_num;
     }
 };
 

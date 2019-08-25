@@ -16,12 +16,17 @@ class Triangle : public BaseObject {
         float intersects(const Vector& origin, const Vector& dest, bool edges);
 
         void apply_rotation() {
+            // checks should be done in the base class
             if (rotation == nullptr) return;
+            if (rotation->getApplyNum() <= 0 || rotation->getAppliedNum() > rotation->getApplyNum()) return;
+
             auto m = getRotationMatrix(rotation);
 
             A = m * A;
             B = m * B;
             C = m * C;
+
+            rotation->markApplied();
         }
 
         Vector& operator [](int i) {

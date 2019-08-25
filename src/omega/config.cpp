@@ -53,6 +53,10 @@ Config::Config(std::string& raw) {
             tmp->rotation = std::make_shared<Rotation>(
                     r["type"].as<int>(), r["angle"].as<float>(),
                     r["axis"][0].as<float>(), r["axis"][1].as<float>(), r["axis"][2].as<float>());
+
+            if (r["apply_num"].IsDefined()) {
+                tmp->rotation->setApplyNum(r["apply_num"].as<int>());
+            }
         } else {
             tmp->rotation = nullptr;
         }

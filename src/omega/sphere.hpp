@@ -28,8 +28,10 @@ class Sphere : public BaseObject {
 
         void apply_rotation() {
             if (rotation == nullptr) return;
+            if (rotation->getApplyNum() <= 0 || rotation->getAppliedNum() > rotation->getApplyNum()) return;
             auto m = getRotationMatrix(rotation);
             center = m * center;
+            rotation->markApplied();
         }
 };
 
